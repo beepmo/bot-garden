@@ -1,13 +1,11 @@
-import time
-
+import time as tim
 import pandas as pd
-from unittest.mock import Mock
 
 from request_csv import csv_pddf
 
 
 def make_df():
-    parse_data_start = time.time()
+    start = tim.time()
 
     # list of bed
     beds = []
@@ -65,33 +63,28 @@ def make_df():
     #                  'Genus Count': genus_cnts
     #                  }
 
-    df = pd.DataFrame({'Bed': pd.Series(beds),
-                       'Species Count': pd.Series(species_cnts, dtype='int16'),
-                       'Genus Count': pd.Series(species_cnts, dtype='int16')
-                       })
-    memory = df.memory_usage()
-
-    attributes = ['Bed', 'Species Count', 'Genus Count']
-
     # memoize the columns in the parsed data
     # attributes = set(dict_of_lists.keys())
     # attributes.remove('Bed')
 
-    # do not replace raw data csv_pddf
-    # noinspection PyTypeChecker
-    # df = pd.DataFrame.from_dict(dict_of_lists,
-    #                             dtype='int16')
+    # df = pd.DataFrame.from_dict(dict_of_lists)
 
-    parse_data_end = time.time()
+    # specify dtype to save memory
+    df = pd.DataFrame({'Bed': pd.Series(beds),  # each string occurs only once
+                       'Species Count': pd.Series(species_cnts, dtype='int64'),
+                       'Genus Count': pd.Series(species_cnts, dtype='int64')
+                       })
+    # put attributes list here to manually update
+    attributes = ['Bed', 'Species Count', 'Genus Count']
+    # clock
+    parse_data_end = tim.time()
+    # check memory
+    memory = df.memory_usage(deep=True)
 
-    time = parse_data_end - parse_data_start
-    print(time,type(time))
-    print(f'Time taken to parse csv df into plottable df: {(parse_data_end - parse_data_start)}.'
-          f'Memory used: {(memory):f}.')
-    print(df.head())
+    print(f'Time taken to parse csv df into plottable df: {(parse_data_end - start):f}.\n'
+          f'Memory used: \n {memory}.')
 
     return df, attributes
-
 
 
 # make sure make_df is run only once. same with mock

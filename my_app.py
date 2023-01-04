@@ -214,7 +214,7 @@ app.layout = html.Div(
 def plots(attribute, gardens):
     filtered_df = filter_cache(gardens)
 
-    return [chloropleth(attribute, filtered_df), bar(attribute,filtered_df)]
+    return [chloropleth(attribute, filtered_df), bar(attribute, filtered_df)]
     # this chloropleth expects list. the other doesn't
 
 
