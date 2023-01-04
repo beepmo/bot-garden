@@ -7,16 +7,24 @@ from request_csv import csv_pddf
 def make_df():
     start = tim.time()
 
-    # list of bed
+    # list of beds
     beds = []
-    # list of species list, same order as list of bed
+    # lists in which the ith entry corresponds to the ith bed in beds:
+    # list of species lists
     species_in_bed = []
+    # list of numbers
+    items_in_bed = []
+    labelled_in_bed = []
+    georecorded_in_bed = []
+    # list of strin lists
+
 
     # populate the lists bed and species_in_bed
     for index, row in csv_pddf.iterrows():  # iterate over all rows of data
         bed = row['Bed']
         species = row['Taxon']
-        label = row['Label']
+        labelled = row['Label']
+        georecorded = row['Geo?']
 
         if bed == 'HUBC':
             continue
@@ -57,22 +65,10 @@ def make_df():
         genus_cnt = len(unique)
         genus_cnts.append(genus_cnt)
 
-    # convert to pandas dataframe
-    # dict_of_lists = {'Bed': beds,
-    #                  'Species Count': species_cnts,
-    #                  'Genus Count': genus_cnts
-    #                  }
-
-    # memoize the columns in the parsed data
-    # attributes = set(dict_of_lists.keys())
-    # attributes.remove('Bed')
-
-    # df = pd.DataFrame.from_dict(dict_of_lists)
-
     # specify dtype to save memory
     df = pd.DataFrame({'Bed': pd.Series(beds),  # each string occurs only once
-                       'Species Count': pd.Series(species_cnts, dtype='int64'),
-                       'Genus Count': pd.Series(species_cnts, dtype='int64')
+                       'Species Count': pd.Series(species_cnts, dtype='int16'),
+                       'Genus Count': pd.Series(species_cnts, dtype='int16')
                        })
     # put attributes list here to manually update
     attributes = ['Bed', 'Species Count', 'Genus Count']

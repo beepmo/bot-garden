@@ -1,5 +1,5 @@
 import time
-
+from datetime import datetime
 import pandas as pd
 import requests
 import io
@@ -37,6 +37,22 @@ download = result.content
 # -------------------------------------------------------
 # Reading the downloaded content and making it a pandas dataframe
 
+today = datetime.today()
+
+
+def days_since(strin):
+    try:
+        date = datetime.strptime(strin, '%m/%d/%y')
+        delta = today - date
+        return int(delta.days)
+    except ValueError:
+        try:
+            date = datetime.strptime(strin, '%Y-%m')
+            delta = today - date
+            return delta.days
+        except:
+            pass
+
 
 def to_bool(label):
     return bool(label)
@@ -45,15 +61,16 @@ def to_bool(label):
 start_csv = time.time()
 csv_pddf = pd.read_csv('dashboard_food.csv',
                        header=0,
-                       names=['Bed', 'Label', 'Geo?', 'Status', 'Status Date', 'Taxon'],
-                       parse_dates=['Status Date'],
+                       names=['Bed', 'Label', 'Geo?', 'Status', 'Days Since Sighted', 'Taxon'],
                        converters={'Geo?': to_bool,
-                                   'Label': to_bool
+                                   'Label': to_bool,
+                                   'Days Since Sighted': days_since
                                    },
                        dtype={'Bed': 'category',
                               'Status': 'category',
                               }
                        )
+csv_pddf = csv_pddf.astype({'Days Since Sighted': 'int32'}, copy=False)
 end_csv = time.time()
 memory = csv_pddf.memory_usage(deep=True)
 
