@@ -1,8 +1,6 @@
 import dash
 from dash import dcc
 from dash import html
-import pandas as pd
-import numpy as np
 from dash.dependencies import Input, Output
 
 # my functions
