@@ -18,6 +18,7 @@ def make_df():
     for index, row in csv_pddf.iterrows():  # iterate over all rows of data
         bed = row['Bed']
         species = row['Taxon']
+        label = row['Label']
 
         if bed == 'HUBC':
             continue
@@ -59,23 +60,38 @@ def make_df():
         genus_cnts.append(genus_cnt)
 
     # convert to pandas dataframe
-    dict_of_lists = {'Bed': beds,
-                     'Species Count': species_cnts,
-                     'Genus Count': genus_cnts
-                     }
+    # dict_of_lists = {'Bed': beds,
+    #                  'Species Count': species_cnts,
+    #                  'Genus Count': genus_cnts
+    #                  }
+
+    df = pd.DataFrame({'Bed': pd.Series(beds),
+                       'Species Count': pd.Series(species_cnts, dtype='int16'),
+                       'Genus Count': pd.Series(species_cnts, dtype='int16')
+                       })
+    memory = df.memory_usage()
+
+    attributes = ['Bed', 'Species Count', 'Genus Count']
 
     # memoize the columns in the parsed data
-    attributes = set(dict_of_lists.keys())
-    attributes.remove('Bed')
+    # attributes = set(dict_of_lists.keys())
+    # attributes.remove('Bed')
 
     # do not replace raw data csv_pddf
-    df = pd.DataFrame.from_dict(dict_of_lists)
+    # noinspection PyTypeChecker
+    # df = pd.DataFrame.from_dict(dict_of_lists,
+    #                             dtype='int16')
 
     parse_data_end = time.time()
 
-    print(f'Time taken to parse csv df into plottable df is {(parse_data_end - parse_data_start)}.')
+    time = parse_data_end - parse_data_start
+    print(time,type(time))
+    print(f'Time taken to parse csv df into plottable df: {(parse_data_end - parse_data_start)}.'
+          f'Memory used: {(memory):f}.')
+    print(df.head())
 
     return df, attributes
+
 
 
 # make sure make_df is run only once. same with mock
