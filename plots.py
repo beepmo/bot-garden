@@ -43,10 +43,23 @@ def chloropleth(attribute, filtered_df):
     # pretty hover
     fig.update_layout(
         hoverlabel=dict(
-            bgcolor="white",
             font_size=16,
             font_family="Rockwell"
         )
+    )
+
+    fig.update_layout(
+        autosize=False,
+        margin=dict(
+            # l=0,
+            # r=0,
+            b=10,
+            t=50,
+            # pad=50,
+            autoexpand=True
+        ),
+        width=1220,
+        #    height=800,
     )
 
     return fig

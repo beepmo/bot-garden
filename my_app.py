@@ -66,22 +66,40 @@ app.layout = html.Div(
                 # tab 1: throwing numbers
                 dcc.Tab(label='Throwing numbers', children=[
 
-                    # garden selector
+                    # menu
                     html.Div(
                         children=[
+
+                            # garden selector
                             html.Div(
                                 children=[
-                                    html.Div(children="Browse gardens", className="menu-title"),
+                                    html.Div(children="Select gardens", className="menu-title"),
                                     dcc.Dropdown(
                                         id="beds-filter",
                                         options=[
                                             {"label": garden, "value": garden}
                                             for garden in gardens
                                         ],
-                                        value="All that beep mapped",
+                                        value="Carolinian Forest",
                                         clearable=True,
                                         searchable=True,
                                         multi=True,
+                                        className="dropdown",
+                                    ),
+                                ],
+                            ),
+
+                            # attribute selector
+                            html.Div(
+                                children=[
+                                    html.Div(children="Attribute", className="menu-title"),
+                                    dcc.Dropdown(
+                                        id="attribute-filter",
+                                        options=[
+                                            {"label": attribute, "value": attribute}
+                                            for attribute in attributes
+                                        ],
+                                        value="Species Count",
                                         className="dropdown",
                                     ),
                                 ],
@@ -95,17 +113,6 @@ app.layout = html.Div(
                         children=[
                             html.Div(
                                 children=[
-
-                                    # attribute selector
-                                    dcc.Dropdown(
-                                        id="attribute-filter",
-                                        options=[
-                                            {"label": attribute, "value": attribute}
-                                            for attribute in attributes
-                                        ],
-                                        value="Species Count",
-                                        className="dropdown",
-                                    ),
 
                                     # chloropleth map
                                     dcc.Graph(

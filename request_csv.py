@@ -33,21 +33,26 @@ status = result.status_code
 
 download = result.content
 
-
 # -------------------------------------------------------
 # Reading the downloaded content and making it a pandas dataframe
 
 today = datetime.today()
+cur_year = today.year
 
 
 def days_since(strin):
     try:
         date = datetime.strptime(strin, '%m/%d/%y')
         delta = today - date
-        return int(delta.days)
+        # If %y < 70, strptime defaults to 2000s. check for 1916-60s.
+        # count on nothing being unchecked for 100 years. I checked; seems true
+        days = int(delta.days)
+        if days < 0:
+            days += 36500  # 100 years
+        return days
     except ValueError:
         try:
-            date = datetime.strptime(strin, '%Y-%m')
+            date = datetime.strptime(strin, '%Y-%m')  # full year specified
             delta = today - date
             return delta.days
         except:
