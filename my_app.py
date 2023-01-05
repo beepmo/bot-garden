@@ -7,7 +7,6 @@ from dash.dependencies import Input, Output
 from plots import chloropleth
 from plots import bar
 from filter_data import filter_bed
-from parse_genus import parse_genus
 
 external_stylesheets = [
     {
@@ -201,7 +200,7 @@ app.layout = html.Div(
 )
 def plots(attribute, gardens):
     filtered_df = filter_cache(gardens)
-
+    # todo avoid circular import
     return [chloropleth(attribute, filtered_df), bar(attribute, filtered_df)]
     # this chloropleth expects list. the other doesn't
 
