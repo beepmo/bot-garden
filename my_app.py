@@ -179,56 +179,7 @@ app.layout = html.Div(
                 ]),
 
                 # tab 2: spotlight
-                dcc.Tab(label='Spotlight', children=[
-                    html.Div(
-                        children=[
-                            html.Div(
-                                children=[
-                                    html.Div(children="Search Genera", className="menu-title"),
-                                    dcc.Dropdown(
-                                        id="genus-filter",
-                                        options=[
-                                            {"label": g, "value": g}
-                                            for g in genus
-                                        ],
-                                        value="Cytisus",
-                                        clearable=True,
-                                        searchable=True,
-                                        className="dropdown",
-                                    ),
-                                ],
-                            ),
-                        ],
-                        className="menu",
-                    ),
-                    html.Div(
-                        children=[
-                            html.Div(
-                                children=[
-
-                                    dcc.Graph(
-                                        id="find family", config={"displayModeBar": True},
-                                    ),
-                                ],
-                                className="card",
-                            ),
-                        ],
-                        className="wrapper",
-                    ),
-                    html.Div(
-                        children=[
-                            html.P(children="🥑", className="header-emoji"),
-                            html.H1(
-                                id="family number", className="header-title"
-                            ),
-                            html.H1(children=' '),
-                            html.P(
-                                id="familyname",
-                                className="header-description",
-                            ),
-                        ],
-                        className="header",
-                    ),
+                dcc.Tab(label='History', children=[
                 ])
             ])
         ]),
