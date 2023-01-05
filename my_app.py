@@ -46,16 +46,10 @@ app.layout = html.Div(
                 # html.P(children="🥑", className="header-emoji"),
                 html.Img(src=logo_image, className="header-logo",
                          style={'textAlign': 'center'}),
-                html.H1(
-                    children="UBC Botanical Garden", className="header-title"
-                ),
-                html.H1(children=' '),
-                html.P(
-                    children='''Otherworldly terrain.
-                            Here are some teasers that don't give away too much.
-                            ''',
-                    className="header-description",
-                ),
+                # html.H3(
+                #     children="UBC Botanical Garden", className="header-title"
+                # ),
+                # TODO left justify
             ],
             className="header",
         ),
@@ -64,7 +58,21 @@ app.layout = html.Div(
             dcc.Tabs([
 
                 # tab 1: throwing numbers
-                dcc.Tab(label='Throwing numbers', children=[
+                dcc.Tab(label='Present', children=[
+
+                    # preamble for 'present' tab
+                    html.Div(
+                        children=[
+                            # html.P(children="🥑", className="header-emoji"),
+
+                            html.P(
+                                children='''Select gardens, a genus, and an attribute to see their snapshot today.
+                                        ''',
+                                className="header-description",
+                            ),
+                        ],
+                        className="tab-header",
+                    ),
 
                     # menu
                     html.Div(
@@ -227,24 +235,6 @@ def big_number(gardens):
     filtered_df = filter_cache(gardens)
     species_cnt = filtered_df['Species Count'].sum()
     return [str(species_cnt)]
-
-
-@app.callback(
-    [
-        Output("find family", "figure"),
-        Output("family number", "children"),
-        Output("familyname", "children")
-    ],
-    [Input("genus-filter", "value")]
-)
-def find_family(genus):
-    axis = genus + ' Count'
-
-    genus_df = genus_cache(genus)
-
-    item_cnt = genus_df[axis].sum()
-
-    return chloropleth(axis, genus_df), item_cnt, axis
 
 
 gcache = {}
