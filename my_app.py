@@ -8,6 +8,9 @@ from plots import chloropleth
 from plots import bar
 from filter_data import filter_bed
 
+# _______________________________________________________________
+# flask
+
 external_stylesheets = [
     {
         "href": "https://fonts.googleapis.com/css2?"
@@ -21,11 +24,22 @@ server = app.server
 app.title = "UBC Bot Garden"
 logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
 
+# _______________________________________________________________
+# variables
+
 # selection options & THE DATA
 from parse_data import ATTRIBUTES, GENUS, CACHE
 
 # plotted regions in geojson
 from filter_data import GARDENS
+
+# callback id
+s_genus = 'snapshot genus'
+s_gardens = 'snapshot set of gardens'
+s_attribute = 'snapshot attribute'
+
+# _______________________________________________________________
+# laying it out
 
 app.layout = html.Div(
     children=[
@@ -73,7 +87,7 @@ app.layout = html.Div(
                                 children=[
                                     html.Div(children="Genus", className="menu-title"),
                                     dcc.Dropdown(
-                                        id="genus-filter",
+                                        id=s_genus,
                                         options=[
                                             {"label": GENUS[i], "value": i}
                                             for i in range(0, len(GENUS))
@@ -90,7 +104,7 @@ app.layout = html.Div(
                                 children=[
                                     html.Div(children="Select Gardens", className="menu-title"),
                                     dcc.Dropdown(
-                                        id="beds-filter",
+                                        id=s_gardens,
                                         options=[
                                             {"label": garden, "value": garden}
                                             for garden in GARDENS
@@ -109,7 +123,7 @@ app.layout = html.Div(
                                 children=[
                                     html.Div(children="Attribute", className="menu-title"),
                                     dcc.Dropdown(
-                                        id="attribute-filter",
+                                        id=s_attribute,
                                         options=[
                                             {"label": attribute, "value": attribute}
                                             for attribute in ATTRIBUTES
@@ -188,9 +202,9 @@ app.layout = html.Div(
         Output("bar", "figure")
     ],
     [
-        Input(component_id='genus-filter', component_property='value'),
-        Input(component_id="attribute-filter", component_property="value"),
-        Input(component_id="beds-filter", component_property="value"),
+        Input(component_id=s_genus, component_property='value'),
+        Input(component_id=s_attribute, component_property="value"),
+        Input(component_id=s_gardens, component_property="value"),
     ],
 )
 def plots(genus_index, attribute, gardens):
