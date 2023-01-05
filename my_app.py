@@ -108,7 +108,7 @@ app.layout = html.Div(
                         className="menu",
                     ),
 
-                    # wrapper contains attribute selector asw chloropleth and bar cards
+                    # wrapper of chloropleth card
                     html.Div(
                         children=[
                             html.Div(
@@ -118,6 +118,18 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="chloropleth", config={"displayModeBar": True},
                                     ),
+                                ],
+                                className="card",
+                            ),
+                        ],
+                        className="wrapper",
+                    ),
+
+                # wrapper of bar card
+                    html.Div(
+                        children=[
+                            html.Div(
+                                children=[
 
                                     # bar plot
                                     dcc.Graph(

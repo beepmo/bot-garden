@@ -54,12 +54,12 @@ def chloropleth(attribute, filtered_df):
             # l=0,
             # r=0,
             b=10,
-            t=50,
+            t=30,
             # pad=50,
             autoexpand=True
         ),
-        width=1220,
-        #    height=800,
+        # width=1220,
+        height=650,
     )
 
     return fig
