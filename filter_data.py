@@ -3,19 +3,20 @@ import time
 
 from parse_data import df
 
-all = 'All that beep mapped'
+all = 'All gardens'
 _4c = 'Carolinian Forest'
 # _1c = 'Contemporary Garden'
 _1p = 'Winter Garden'
-laa = 'Alpine Australasia'
-laf = 'Alpine Africa'
-las = 'Alpine Asia'  # include 'LAM'
-lsa = 'Alpine South America'
-lna = 'Alpine North America'
-lcs = 'Alpine Cactus and Succulent'  # include 'LTC'
-leu = 'Alpine Europe'
+alp = 'Alpine Garden'
+# laa = 'Alpine Australasia'
+# # laf = 'Alpine Africa'
+# las = 'Alpine Asia'  # include 'LAM'
+# lsa = 'Alpine South America'
+# # lna = 'Alpine North America'
+# lcs = 'Alpine Cactus and Succulent'  # include 'LTC'
+# leu = 'Alpine Europe'
 
-gardens = [all, _4c, laa, laf, las, lsa, lna, lcs, leu]
+gardens = [all, _4c, _1p, alp]
 
 
 def build_pattern(array_of_gardens):
@@ -27,20 +28,20 @@ def build_pattern(array_of_gardens):
     #     regex += '1C0\d|'
     if _1p in array_of_gardens:
         regex += '1P0\d|'
-    if laa in array_of_gardens:
-        regex += 'LAA\d|'
-    if laf in array_of_gardens:
-        regex += 'LAF\d|'
-    if las in array_of_gardens:
-        regex += 'LAS\d|LAM|'
-    if lsa in array_of_gardens:
-        regex += 'LSA\d|'
-    if lna in array_of_gardens:
-        regex += 'LNA\d'
-    if lcs in array_of_gardens:
-        regex += 'LCS\d|LTC\d|'
-    if leu in array_of_gardens:
-        regex += 'LEU\d|'
+    if alp in array_of_gardens:
+        regex += 'LAA\d|LAF\d|LAS\d|LAM|LSA\d|LSA\d|LNA\d|LCS\d|LTC\d|LEU\d|'
+    # # if laf in array_of_gardens:
+    # #     regex += 'LAF\d|'
+    # if las in array_of_gardens:
+    #     regex += 'LAS\d|LAM|'
+    # if lsa in array_of_gardens:
+    #     regex += 'LSA\d|'
+    # # if lna in array_of_gardens:
+    # #     regex += 'LNA\d'
+    # if lcs in array_of_gardens:
+    #     regex += 'LCS\d|LTC\d|'
+    # if leu in array_of_gardens:
+    #     regex += 'LEU\d|'
 
     regex += '$'
     return regex
