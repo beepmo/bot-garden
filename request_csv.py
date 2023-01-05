@@ -47,12 +47,12 @@ csv_pddf = pd.read_csv('dashboard_food.csv',
                        header=0,
                        names=['Bed', 'Label', 'Geo?', 'Status', 'Status Date', 'Taxon'],
                        parse_dates=['Status Date'],
-                       # converters={'Geo?': to_bool,
-                       #             'Label': to_bool
-                       #             },
-                       # dtype={'Bed': 'category',
-                       #        'Status': 'category',
-                       #        }
+                       converters={'Geo?': to_bool,
+                                   'Label': to_bool
+                                   },
+                       dtype={'Bed': 'category',
+                              'Status': 'category',
+                              }
                        )
 end_csv = time.time()
 memory = csv_pddf.memory_usage(deep=True)
