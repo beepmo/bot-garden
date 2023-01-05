@@ -4,7 +4,7 @@ import pandas as pd
 from request_csv import csv_pddf
 
 
-def make_df(bool_all, genus):
+def make_df(genus):  # genus is string
     start = tim.time()
 
     # list of beds
@@ -23,7 +23,7 @@ def make_df(bool_all, genus):
     for index, row in csv_pddf.iterrows():  # iterate over all rows of data
         species = row['Taxon']
 
-        if (not bool_all) and (species.partition(' ')[0] != genus):
+        if genus and (species.partition(' ')[0] != genus):
             continue
 
         bed = row['Bed']
@@ -34,7 +34,6 @@ def make_df(bool_all, genus):
         labelled = row['Label']
         georecorded = row['Geo?']
         age = row['Days Since Sighted']
-
 
         try:
             # bed is in beds
@@ -116,7 +115,6 @@ def make_df(bool_all, genus):
                        'Days since sightings': pd.Series(ages_in_bed)
                        })
     # put attributes list here to manually update
-    # TODO update
     attributes = ['Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats']
     # clock
     parse_data_end = tim.time()
@@ -134,10 +132,10 @@ def make_df(bool_all, genus):
 df_shelf = ()
 
 if len(df_shelf) == 0:
-    df_shelf = make_df()
-    df = df_shelf[0]
+    df_shelf = make_df('')
+    all_genus_df = df_shelf[0]
     attributes = df_shelf[1]
 else:
     assert len(df_shelf) == 2
-    df = df_shelf[0]
+    all_genus_df = df_shelf[0]
     attributes = df_shelf[1]
