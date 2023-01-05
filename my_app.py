@@ -70,6 +70,24 @@ app.layout = html.Div(
                     html.Div(
                         children=[
 
+                            # genus selector
+                            html.Div(
+                                children=[
+                                    html.Div(children="Genus", className="menu-title"),
+                                    dcc.Dropdown(
+                                        id="genus-filter",
+                                        options=[
+                                            {"label": g, "value": g}
+                                            for g in genus
+                                        ],
+                                        value="",
+                                        clearable=True,
+                                        searchable=True,
+                                        className="dropdown",
+                                    ),
+                                ],
+                            ),
+
                             # garden selector
                             html.Div(
                                 children=[
@@ -104,6 +122,7 @@ app.layout = html.Div(
                                     ),
                                 ],
                             ),
+
                         ],
                         className="menu",
                     ),
@@ -149,9 +168,8 @@ app.layout = html.Div(
                             html.H1(
                                 id="big number", className="header-title"
                             ),
-                            html.H1(children=' '),
                             html.P(
-                                children='''\n\n\n SPECIES  ||  GENUS \n\n
+                                children='''SPECIES
                                 ''',
                                 className="header-description",
                             ),
@@ -257,8 +275,7 @@ def filter_cache(gardens):
 def big_number(gardens):
     filtered_df = filter_cache(gardens)
     species_cnt = filtered_df['Species Count'].sum()
-    genus_cnt = filtered_df['Genus Count'].sum()
-    return [str(species_cnt) + ' |-------| ' + str(genus_cnt)]
+    return [str(species_cnt)]
 
 
 @app.callback(
