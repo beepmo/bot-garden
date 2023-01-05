@@ -4,7 +4,7 @@ import pandas as pd
 from request_csv import csv_pddf
 
 
-def make_df():
+def make_df(bool_all, genus):
     start = tim.time()
 
     # list of beds
@@ -21,14 +21,20 @@ def make_df():
 
     # populate the lists bed and species_in_bed
     for index, row in csv_pddf.iterrows():  # iterate over all rows of data
-        bed = row['Bed']
         species = row['Taxon']
+
+        if (not bool_all) and (species.partition(' ')[0] != genus):
+            continue
+
+        bed = row['Bed']
+        # just for this data source
+        if bed == 'HUBC':
+            continue
+
         labelled = row['Label']
         georecorded = row['Geo?']
         age = row['Days Since Sighted']
 
-        if bed == 'HUBC':
-            continue
 
         try:
             # bed is in beds
@@ -84,8 +90,6 @@ def make_df():
 
     # species count by bed, in same order as beds
     species_cnts = []
-    # genus count by bed, in same order as beds
-    genus_cnts = []
 
     for j in range(len(beds)):
         # -------------------------------------------------------
@@ -101,21 +105,11 @@ def make_df():
         species_cnt = len(bed_group)
         species_cnts.append(species_cnt)
 
-        # count genus (first word before space)
-        unique = set()
-        for i in range(len(bed_group)):
-            genus = bed_group[i].partition(' ')[0]
-            unique.add(genus)
-
-        genus_cnt = len(unique)
-        genus_cnts.append(genus_cnt)
-
     # -------------------------------------------------------
 
     # specify dtype to save memory
     df = pd.DataFrame({'Bed': pd.Series(beds),  # each string occurs only once
                        'Species Count': pd.Series(species_cnts, dtype='int16'),
-                       'Genus Count': pd.Series(genus_cnts, dtype='int16'),
                        'Item Count': pd.Series(items_in_bed, dtype='int16'),
                        'Label Stats': pd.Series(labelled_in_bed, dtype='int8'),
                        'Geo-record Stats': pd.Series(georecorded_in_bed, dtype='int8'),
@@ -123,7 +117,7 @@ def make_df():
                        })
     # put attributes list here to manually update
     # TODO update
-    attributes = ['Species Count', 'Genus Count', 'Item Count', 'Label Stats', 'Geo-record Stats']
+    attributes = ['Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats']
     # clock
     parse_data_end = tim.time()
     # check memory
