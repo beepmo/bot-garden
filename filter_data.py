@@ -1,7 +1,7 @@
 import re
 import time
 
-all = 'All gardens'
+all = 'All GARDENS'
 _4c = 'Carolinian Forest'
 # _1c = 'Contemporary Garden'
 _1p = 'Winter Garden'
@@ -14,7 +14,7 @@ alp = 'Alpine Garden'
 # lcs = 'Alpine Cactus and Succulent'  # include 'LTC'
 # leu = 'Alpine Europe'
 
-gardens = [all, _4c, _1p, alp]
+GARDENS = [all, _4c, _1p, alp]
 
 
 def build_pattern(array_of_gardens):

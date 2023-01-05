@@ -24,11 +24,8 @@ logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
 # selection options & THE DATA
 from parse_data import ATTRIBUTES, GENUS, CACHE
 
-
 # plotted regions in geojson
-from filter_data import gardens
-
-
+from filter_data import GARDENS
 
 app.layout = html.Div(
     children=[
@@ -40,7 +37,7 @@ app.layout = html.Div(
                 html.Img(src=logo_image, className="header-logo",
                          style={'textAlign': 'center'}),
                 # html.H3(
-                #     children="UBC Botanical Garden", className="header-title"
+                #     children="Botanical Garden", className="header-title"
                 # ),
                 # TODO left justify
             ],
@@ -51,7 +48,7 @@ app.layout = html.Div(
             dcc.Tabs([
 
                 # tab 1: present
-                dcc.Tab(label='Present', children=[
+                dcc.Tab(label='Snapshot', children=[
 
                     # preamble for 'present' tab
                     html.Div(
@@ -59,7 +56,7 @@ app.layout = html.Div(
                             # html.P(children="🥑", className="header-emoji"),
 
                             html.P(
-                                children='''Select gardens, a genus, and an attribute to see their snapshot today.
+                                children='''Select a set of gardens and an attribute. Option: filter to one genus.
                                         ''',
                                 className="header-description",
                             ),
@@ -79,10 +76,9 @@ app.layout = html.Div(
                                         id="genus-filter",
                                         options=[
                                             {"label": GENUS[i], "value": i}
-                                            for i in range(len(GENUS))
+                                            for i in range(0, len(GENUS))
                                         ],
                                         value=0,
-                                        clearable=True,
                                         searchable=True,
                                         className="dropdown",
                                     ),
@@ -92,12 +88,12 @@ app.layout = html.Div(
                             # garden selector
                             html.Div(
                                 children=[
-                                    html.Div(children="Select gardens", className="menu-title"),
+                                    html.Div(children="Select Gardens", className="menu-title"),
                                     dcc.Dropdown(
                                         id="beds-filter",
                                         options=[
                                             {"label": garden, "value": garden}
-                                            for garden in gardens
+                                            for garden in GARDENS
                                         ],
                                         value=['Alpine Garden', 'Winter Garden'],
                                         clearable=True,
@@ -145,7 +141,7 @@ app.layout = html.Div(
                         className="wrapper",
                     ),
 
-                # wrapper of bar card
+                    # wrapper of bar card
                     html.Div(
                         children=[
                             html.Div(
@@ -173,8 +169,12 @@ app.layout = html.Div(
                     ),
                 ]),
 
-                # tab 2: spotlight
-                dcc.Tab(label='History', children=[
+                # tab 2: history by garden
+                dcc.Tab(label='History by Garden', children=[
+                ]),
+
+                # tab 3: history by genus
+                dcc.Tab(label='History by Genus', children=[
                 ])
             ])
         ]),
