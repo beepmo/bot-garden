@@ -21,20 +21,14 @@ server = app.server
 app.title = "UBC Bot Garden"
 logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
 
-# set of "throwing" tab dropdown options
-from parse_data import attributes
+# selection options & THE DATA
+from parse_data import ATTRIBUTES, GENUS, CACHE
+
 
 # plotted regions in geojson
 from filter_data import gardens
 
-# list of "spotlight" tab options
-genus = ['Acer',
-         'Magnolia',
-         'Rhododendron',
-         'Cytisus',
-         'Lavendula',
-         'Toxicodendron'
-         ]
+
 
 app.layout = html.Div(
     children=[
@@ -56,7 +50,7 @@ app.layout = html.Div(
         html.Div([
             dcc.Tabs([
 
-                # tab 1: throwing numbers
+                # tab 1: present
                 dcc.Tab(label='Present', children=[
 
                     # preamble for 'present' tab
@@ -84,10 +78,10 @@ app.layout = html.Div(
                                     dcc.Dropdown(
                                         id="genus-filter",
                                         options=[
-                                            {"label": g, "value": g}
-                                            for g in genus
+                                            {"label": GENUS[i], "value": i}
+                                            for i in range(len(GENUS))
                                         ],
-                                        value="",
+                                        value=0,
                                         clearable=True,
                                         searchable=True,
                                         className="dropdown",
@@ -122,7 +116,7 @@ app.layout = html.Div(
                                         id="attribute-filter",
                                         options=[
                                             {"label": attribute, "value": attribute}
-                                            for attribute in attributes
+                                            for attribute in ATTRIBUTES
                                         ],
                                         value="Item Count",
                                         className="dropdown",
@@ -194,26 +188,15 @@ app.layout = html.Div(
         Output("bar", "figure")
     ],
     [
+        Input(component_id='genus-filter', component_property='value'),
         Input(component_id="attribute-filter", component_property="value"),
         Input(component_id="beds-filter", component_property="value"),
     ],
 )
-def plots(attribute, gardens):
-    filtered_df = filter_cache(gardens)
-    # todo avoid circular import
+def plots(genus_index, attribute, gardens):
+    filtered_df = filter_bed(CACHE[genus_index], gardens)
     return [chloropleth(attribute, filtered_df), bar(attribute, filtered_df)]
-    # this chloropleth expects list. the other doesn't
-
-
-gcache = {}
-
-
-def genus_cache(genus):
-    filtered = gcache.get(genus)
-    if filtered is None:
-        genus_df = parse_genus(genus)
-        gcache.update({genus: filtered})
-    return genus_df
+    # this callback expects list.
 
 
 if __name__ == "__main__":

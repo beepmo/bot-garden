@@ -1,8 +1,6 @@
 import re
 import time
 
-from parse_data import all_genus_df
-
 all = 'All gardens'
 _4c = 'Carolinian Forest'
 # _1c = 'Contemporary Garden'
@@ -47,14 +45,14 @@ def build_pattern(array_of_gardens):
     return regex
 
 
-def filter_bed(array_of_gardens):
+def filter_bed(df, array_of_gardens):
     if all in array_of_gardens:
-        return all_genus_df
+        return df
 
     filter_bed_start = time.time()
 
     bed_pattern = build_pattern(array_of_gardens)
-    filtered = all_genus_df[all_genus_df.Bed.str.match(bed_pattern)]
+    filtered = df[df.Bed.str.match(bed_pattern)]
 
     filter_bed_stop = time.time()
 

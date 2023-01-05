@@ -3,6 +3,17 @@ import pandas as pd
 
 from request_csv import csv_pddf
 
+# list of "spotlight" tab options
+GENUS = ['',
+         'Acer',
+         'Magnolia',
+         'Rhododendron',
+         'Cornus',
+         'Sorbus',
+         'Clematis',
+         ]
+ATTRIBUTES = ['Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats']
+CACHE = []
 
 def make_df(genus):  # genus is string
     start = tim.time()
@@ -114,8 +125,7 @@ def make_df(genus):  # genus is string
                        'Geo-record Stats': pd.Series(georecorded_in_bed, dtype='int8'),
                        'Days since sightings': pd.Series(ages_in_bed)
                        })
-    # put attributes list here to manually update
-    attributes = ['Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats']
+
     # clock
     parse_data_end = tim.time()
     # check memory
@@ -124,18 +134,13 @@ def make_df(genus):  # genus is string
     print(f'Time taken to parse csv df into plottable df: {(parse_data_end - start):f}.\n'
           f'Memory used: \n {memory}.')
 
-    return df, attributes
+    return df
 
 
-# make sure make_df is run only once. same with mock
+# make sure make_df loop is run only once. same with mock
 # I see that it gets run twice anyways: before building flask app and after
-df_shelf = ()
 
-if len(df_shelf) == 0:
-    df_shelf = make_df('')
-    all_genus_df = df_shelf[0]
-    attributes = df_shelf[1]
-else:
-    assert len(df_shelf) == 2
-    all_genus_df = df_shelf[0]
-    attributes = df_shelf[1]
+if len(CACHE) == 0:
+    for g in GENUS:
+        CACHE.append(make_df(g))
+
