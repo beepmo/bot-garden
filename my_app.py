@@ -172,15 +172,9 @@ app.layout = html.Div(
                     # bottom section containing big numbers
                     html.Div(
                         children=[
+                            html.H1(children=''),
                             html.P(children="🥑", className="header-emoji"),
-                            html.H1(
-                                id="big number", className="header-title"
-                            ),
-                            html.P(
-                                children='''SPECIES
-                                ''',
-                                className="header-description",
-                            ),
+                            html.H1(children=''),
                         ],
                         className="header",
                     ),
@@ -210,31 +204,6 @@ def plots(attribute, gardens):
 
     return [chloropleth(attribute, filtered_df), bar(attribute, filtered_df)]
     # this chloropleth expects list. the other doesn't
-
-
-df_cache = {}
-
-
-def filter_cache(gardens):
-    filtered = df_cache.get(tuple(gardens))
-    if filtered is None:
-        filtered = filter_bed(gardens)
-        df_cache.update({tuple(gardens): filtered})
-    return filtered
-
-
-@app.callback(
-    [
-        Output("big number", "children")
-    ],
-    [
-        Input(component_id="beds-filter", component_property="value"),
-    ]
-)
-def big_number(gardens):
-    filtered_df = filter_cache(gardens)
-    species_cnt = filtered_df['Species Count'].sum()
-    return [str(species_cnt)]
 
 
 gcache = {}
