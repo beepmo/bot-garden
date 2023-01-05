@@ -58,12 +58,12 @@ body {
 }
 
 .menu {
-    height: 112px;
     width: 700px;
     display: flex;
     justify-content: space-evenly;
     padding-top: 24px;
     margin: 80px auto 0 auto;
+    padding-bottom: 24px;
     background-color: #011333;
     box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
 }

@@ -79,13 +79,24 @@ def make_df():
 
     assert 'HUBC' not in beds
 
+    # -------------------------------------------------------
+    # turn counts into plottable
+
     # species count by bed, in same order as beds
     species_cnts = []
     # genus count by bed, in same order as beds
     genus_cnts = []
 
-    # get species and genus count from species list
-    for bed_group in species_in_bed:
+    for j in range(len(beds)):
+        # -------------------------------------------------------
+        # get tag as int percentage
+        labelled_in_bed[j] = int(labelled_in_bed[j]/items_in_bed[j] * 100)
+        georecorded_in_bed[j] = int(georecorded_in_bed[j]/items_in_bed[j] * 100)
+
+        # -------------------------------------------------------
+        # get species and genus count from species list
+        bed_group = species_in_bed[j]
+
         # count species incl. subspecies
         species_cnt = len(bed_group)
         species_cnts.append(species_cnt)
@@ -99,18 +110,20 @@ def make_df():
         genus_cnt = len(unique)
         genus_cnts.append(genus_cnt)
 
+    # -------------------------------------------------------
+
     # specify dtype to save memory
     df = pd.DataFrame({'Bed': pd.Series(beds),  # each string occurs only once
                        'Species Count': pd.Series(species_cnts, dtype='int16'),
                        'Genus Count': pd.Series(genus_cnts, dtype='int16'),
                        'Item Count': pd.Series(items_in_bed, dtype='int16'),
-                       'Label Count': pd.Series(labelled_in_bed, dtype='int16'),
-                       'Geo-record Count': pd.Series(georecorded_in_bed, dtype='int16'),
+                       'Label Stats': pd.Series(labelled_in_bed, dtype='int8'),
+                       'Geo-record Stats': pd.Series(georecorded_in_bed, dtype='int8'),
                        'Days since sightings': pd.Series(ages_in_bed)
                        })
     # put attributes list here to manually update
     # TODO update
-    attributes = ['Bed', 'Species Count', 'Genus Count']
+    attributes = ['Species Count', 'Genus Count', 'Item Count', 'Label Stats', 'Geo-record Stats']
     # clock
     parse_data_end = tim.time()
     # check memory

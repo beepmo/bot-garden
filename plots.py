@@ -1,14 +1,62 @@
 import plotly.express as px
 import plotly.graph_objects as go
+import functools
 
 import json
 
 with open('map.geojson') as raw_map:
     marauders = json.load(raw_map)
 
+hover_prep = {'Bed': False}
+
+
+def beautify(plotter):
+    @functools.wraps(plotter)
+    def wrapper(attribute, df):
+        percent_needed = attribute == 'Label Stats' or attribute == 'Geo-record Stats'
+
+        # make hoverdata from attribute
+        if percent_needed:
+            hover_prep.update({
+                'Label Stats': False,
+                'Geo-record Stats': False,
+                '% Labelled': (':.0%', df['Label Stats'] / 100),
+                '# Labelled': (':.0f', df['Label Stats'] / 100 * df['Item Count']),
+                'Geo-recorded': (':.0%', df['Geo-record Stats'] / 100),
+                '# Geo-recorded': (':.0f', df['Geo-record Stats'] / 100 * df['Item Count']),
+            })
+
+            # run plot
+            fig = plotter(attribute, df, hover_prep)
+
+            # bar plot
+            fig.update_layout(yaxis_ticksuffix='%')
+            # chloropleth
+            fig.update_coloraxes(colorbar_ticksuffix='%')
+
+        else:
+            # run plot
+            fig = plotter(attribute, df, hover_prep)
+
+        # smooth transition when updated
+        fig.update_layout(transition_duration=500)
+
+        # pretty hover
+        fig.update_layout(
+            hoverlabel=dict(
+                font_size=16,
+                font_family="Rockwell"
+            ),
+        )
+
+        return fig
+
+    return wrapper
+
 
 # REQUIRES: attribute is 'Species Count' or 'Genus count'
-def chloropleth(attribute, filtered_df):
+@beautify
+def chloropleth(attribute, filtered_df, hover_prep):
     fig = px.choropleth(
         # pandas dataframe
         filtered_df,
@@ -25,29 +73,20 @@ def chloropleth(attribute, filtered_df):
         # featureidkey = 'properties.<location column in csv_pddf, which should be same as property key in geojson>'
         featureidkey='properties.bed',
 
-        # hover_data=['Species Count', 'Genus Count'],
         hover_name='Bed',
 
         height=500,
 
         color_continuous_scale='blues',
 
+        # decorator
+        hover_data=hover_prep,
     )
 
     # if fitbounds is not set, the entire globe is shown
     fig.update_geos(fitbounds="geojson", visible=True)
 
-    # smooth transition when updated
-    fig.update_layout(transition_duration=500)
-
-    # pretty hover
-    fig.update_layout(
-        hoverlabel=dict(
-            font_size=16,
-            font_family="Rockwell"
-        )
-    )
-
+    # make bigger
     fig.update_layout(
         autosize=False,
         margin=dict(
@@ -65,10 +104,14 @@ def chloropleth(attribute, filtered_df):
     return fig
 
 
-def bar(attribute, filtered_df):
+@beautify
+def bar(attribute, filtered_df, hover_prep):
     fig = go.Figure(px.bar(filtered_df,
                            x='Bed',
                            y=attribute,
+                           hover_name='Bed',
+                           # decorator
+                           hover_data=hover_prep,
                            ))
 
     fig.update_layout(xaxis={'categoryorder': 'total descending'})

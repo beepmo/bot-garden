@@ -80,7 +80,7 @@ app.layout = html.Div(
                                             {"label": garden, "value": garden}
                                             for garden in gardens
                                         ],
-                                        value="Carolinian Forest",
+                                        value=['Alpine Garden', 'Winter Garden'],
                                         clearable=True,
                                         searchable=True,
                                         multi=True,
@@ -99,7 +99,7 @@ app.layout = html.Div(
                                             {"label": attribute, "value": attribute}
                                             for attribute in attributes
                                         ],
-                                        value="Species Count",
+                                        value="Item Count",
                                         className="dropdown",
                                     ),
                                 ],
