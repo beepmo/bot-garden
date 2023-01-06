@@ -23,12 +23,12 @@ GENUS = ('',
          'Sorbus',
          'Clematis',
          )
+
 ATTRIBUTES = ('Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats')
 
 # -------------------------------------------------------
 # store for today, before new csv drops tomorrow
 CACHE = []
-
 
 # -------------------------------------------------------
 
@@ -41,15 +41,15 @@ def make_df(genus, fuzzy_age, recent):  # genus is string
     beds = []
     # lists in which the ith entry corresponds to the ith bed in beds:
     # list of species lists
-    species_in_bed = []
+    species_per_bed = []
     # list of numbers
-    items_in_bed = []
-    labelled_in_bed = []
-    georecorded_in_bed = []
-    # list of strin lists
-    ages_in_bed = []
+    items_per_bed = []
+    label_pc_per_bed = []  # int percentage of items labelled
+    geo_pc_per_bed = []  # int percentage of items geo-recorded
+    post_fuzzy_per_bed = []  # number of items reported after fuzzy date
+    recent_per_bed = []  # number of items reported recently
 
-    # populate the lists bed and species_in_bed
+    # populate the lists bed and species_per_bed
     for index, row in csv_pddf.iterrows():  # iterate over all rows of data
         species = row['Taxon']
 
@@ -71,18 +71,18 @@ def make_df(genus, fuzzy_age, recent):  # genus is string
 
             # update tags
             if labelled:
-                labelled_in_bed[bed_location] = labelled_in_bed[bed_location] + 1
+                label_pc_per_bed[bed_location] = label_pc_per_bed[bed_location] + 1
             if georecorded:
-                georecorded_in_bed[bed_location] = georecorded_in_bed[bed_location] + 1
-
-            # update days since sighting
-            ages_in_bed[bed_location].append(age)
+                geo_pc_per_bed[bed_location] = geo_pc_per_bed[bed_location] + 1
 
             # update item count
-            items_in_bed[bed_location] = items_in_bed[bed_location] + 1
+            items_per_bed[bed_location] = items_per_bed[bed_location] + 1
+
+            # update datetime things
+
 
             # update species
-            in_this_bed = species_in_bed[bed_location]
+            in_this_bed = species_per_bed[bed_location]
             if not species in in_this_bed:
                 in_this_bed.append(species)
 
@@ -93,24 +93,21 @@ def make_df(genus, fuzzy_age, recent):  # genus is string
             beds.append(bed)
 
             # add species as list
-            species_in_bed.append([species])
-
-            # add age as list
-            ages_in_bed.append([age])
+            species_per_bed.append([species])
 
             # count item as list
-            items_in_bed.append(1)
+            items_per_bed.append(1)
 
             # add tag baskets
             if labelled:
-                labelled_in_bed.append(1)
+                label_pc_per_bed.append(1)
             else:
-                labelled_in_bed.append(0)
+                label_pc_per_bed.append(0)
 
             if georecorded:
-                georecorded_in_bed.append(1)
+                geo_pc_per_bed.append(1)
             else:
-                georecorded_in_bed.append(0)
+                geo_pc_per_bed.append(0)
 
     assert 'HUBC' not in beds
 
@@ -123,12 +120,12 @@ def make_df(genus, fuzzy_age, recent):  # genus is string
     for j in range(len(beds)):
         # -------------------------------------------------------
         # get tag as int percentage
-        labelled_in_bed[j] = int(labelled_in_bed[j] / items_in_bed[j] * 100)
-        georecorded_in_bed[j] = int(georecorded_in_bed[j] / items_in_bed[j] * 100)
+        label_pc_per_bed[j] = int(label_pc_per_bed[j] / items_per_bed[j] * 100)
+        geo_pc_per_bed[j] = int(geo_pc_per_bed[j] / items_per_bed[j] * 100)
 
         # -------------------------------------------------------
         # get species and genus count from species list
-        bed_group = species_in_bed[j]
+        bed_group = species_per_bed[j]
 
         # count species incl. subspecies
         species_cnt = len(bed_group)
@@ -139,10 +136,9 @@ def make_df(genus, fuzzy_age, recent):  # genus is string
     # specify dtype to save memory
     df = pd.DataFrame({'Bed': pd.Series(beds),  # each string occurs only once
                        'Species Count': pd.Series(species_cnts, dtype='int16'),
-                       'Item Count': pd.Series(items_in_bed, dtype='int16'),
-                       'Label Stats': pd.Series(labelled_in_bed, dtype='int8'),
-                       'Geo-record Stats': pd.Series(georecorded_in_bed, dtype='int8'),
-                       'Days since sightings': pd.Series(ages_in_bed)
+                       'Item Count': pd.Series(items_per_bed, dtype='int16'),
+                       'Label Stats': pd.Series(label_pc_per_bed, dtype='int8'),
+                       'Geo-record Stats': pd.Series(geo_pc_per_bed, dtype='int8'),
                        })
 
     # clock
