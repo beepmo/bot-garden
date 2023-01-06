@@ -34,9 +34,9 @@ from parse_data import ATTRIBUTES, GENUS, CACHE
 from filter_data import GARDENS
 
 # callback id
-s_genus = 'snapshot genus'
-s_gardens = 'snapshot set of gardens'
-s_attribute = 'snapshot attribute'
+snapshot_genus = 'snapshot genus'
+snapshot_gardens = 'snapshot set of gardens'
+snapshot_attribute = 'snapshot attribute'
 
 # _______________________________________________________________
 # laying it out
@@ -87,7 +87,7 @@ app.layout = html.Div(
                                 children=[
                                     html.Div(children="Genus", className="menu-title"),
                                     dcc.Dropdown(
-                                        id=s_genus,
+                                        id=snapshot_genus,
                                         options=[
                                             {"label": GENUS[i], "value": i}
                                             for i in range(0, len(GENUS))
@@ -104,7 +104,7 @@ app.layout = html.Div(
                                 children=[
                                     html.Div(children="Select Gardens", className="menu-title"),
                                     dcc.Dropdown(
-                                        id=s_gardens,
+                                        id=snapshot_gardens,
                                         options=[
                                             {"label": garden, "value": garden}
                                             for garden in GARDENS
@@ -202,9 +202,9 @@ app.layout = html.Div(
         Output("bar", "figure")
     ],
     [
-        Input(component_id=s_genus, component_property='value'),
-        Input(component_id=s_attribute, component_property="value"),
-        Input(component_id=s_gardens, component_property="value"),
+        Input(component_id=snapshot_genus, component_property='value'),
+        Input(component_id=snapshot_attribute, component_property="value"),
+        Input(component_id=snapshot_gardens, component_property="value"),
     ],
 )
 def plots(genus_index, attribute, gardens):

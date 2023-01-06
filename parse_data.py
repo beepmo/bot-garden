@@ -2,20 +2,39 @@ import time as tim
 import pandas as pd
 
 from request_csv import csv_pddf
+from datetime import datetime
 
-# list of "spotlight" tab options
-GENUS = ['',
+# -------------------------------------------------------
+# Parse constants that control what data we display
+
+# client-specified time before which data is less reliable
+FUZZY = datetime.strptime('2016', '%Y')
+delta_fuzzy = datetime.today() - FUZZY
+FUZZY_AGE = delta_fuzzy.days
+
+# number of days considered recent
+RECENT = 365
+
+GENUS = ('',
          'Acer',
          'Magnolia',
          'Rhododendron',
          'Cornus',
          'Sorbus',
          'Clematis',
-         ]
-ATTRIBUTES = ['Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats']
+         )
+ATTRIBUTES = ('Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats')
+
+# -------------------------------------------------------
+# store for today, before new csv drops tomorrow
 CACHE = []
 
-def make_df(genus):  # genus is string
+
+# -------------------------------------------------------
+
+
+# create one row of attributes for each bed
+def make_df(genus, fuzzy_age, recent):  # genus is string
     start = tim.time()
 
     # list of beds
@@ -104,8 +123,8 @@ def make_df(genus):  # genus is string
     for j in range(len(beds)):
         # -------------------------------------------------------
         # get tag as int percentage
-        labelled_in_bed[j] = int(labelled_in_bed[j]/items_in_bed[j] * 100)
-        georecorded_in_bed[j] = int(georecorded_in_bed[j]/items_in_bed[j] * 100)
+        labelled_in_bed[j] = int(labelled_in_bed[j] / items_in_bed[j] * 100)
+        georecorded_in_bed[j] = int(georecorded_in_bed[j] / items_in_bed[j] * 100)
 
         # -------------------------------------------------------
         # get species and genus count from species list
@@ -142,5 +161,4 @@ def make_df(genus):  # genus is string
 
 if len(CACHE) == 0:
     for g in GENUS:
-        CACHE.append(make_df(g))
-
+        CACHE.append(make_df(g, FUZZY_AGE, RECENT))
