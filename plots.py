@@ -4,7 +4,7 @@ import functools
 
 import json
 
-with open('map.geojson') as raw_map:
+with open('entire.geojson') as raw_map:
     marauders = json.load(raw_map)
 
 hover_prep = {'Bed': False}
@@ -71,7 +71,7 @@ def chloropleth(attribute, filtered_df, hover_prep):
         geojson=marauders,
 
         # featureidkey = 'properties.<location column in csv_pddf, which should be same as property key in geojson>'
-        featureidkey='properties.bed',
+        featureidkey='properties.b',
 
         hover_name='Bed',
 
