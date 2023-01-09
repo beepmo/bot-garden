@@ -109,7 +109,7 @@ app.layout = html.Div(
                                             {"label": garden, "value": garden}
                                             for garden in GARDENS
                                         ],
-                                        value=['Alpine Garden', 'Winter Garden'],
+                                        value=('Alpine Garden', 'Winter Garden'),
                                         clearable=True,
                                         searchable=True,
                                         multi=True,
@@ -208,7 +208,7 @@ app.layout = html.Div(
     ],
 )
 def plots(genus_index, attribute, gardens):
-    filtered_df = filter_bed(CACHE[genus_index], gardens)
+    filtered_df = filter_bed(CACHE[genus_index], set(gardens))  # convert list to set
     return [chloropleth(attribute, filtered_df), bar(attribute, filtered_df)]
     # this callback expects list.
 
