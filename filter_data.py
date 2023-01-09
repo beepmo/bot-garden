@@ -98,18 +98,18 @@ def build_pattern(gardens_set):
     return regex
 
 
-def filter_bed(df, array_of_gardens):
-    if all in array_of_gardens:
+def filter_bed(df, gardens_set):
+    if all in gardens_set:
         return df
 
     filter_bed_start = time.time()
 
-    bed_pattern = build_pattern(array_of_gardens)
+    bed_pattern = build_pattern(gardens_set)
     filtered = df[df.Bed.str.match(bed_pattern)]
 
     filter_bed_stop = time.time()
 
     print(
-        f'Time taken to apply filter is {(filter_bed_stop - filter_bed_start)}. \n Gardens selected: {array_of_gardens}')
+        f'Time taken to apply filter is {(filter_bed_stop - filter_bed_start)}. \n Gardens selected: {gardens_set}')
 
     return filtered
