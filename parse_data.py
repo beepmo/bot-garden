@@ -34,9 +34,21 @@ def make_df(genus):  # genus is string
     # list of species lists
     species_in_bed = []
     # list of numbers
+    # TODO refactor
     items_in_bed = []
     labelled_in_bed = []
     georecorded_in_bed = []
+    # TODO implement, steal from another branch
+    # l = labelled
+    # g = geo-recorded
+    # r = reported after date
+    # counts, not percentages
+    lgr = []
+    l = []
+    g = []
+
+
+
     # list of strin lists
     ages_in_bed = []
 
