@@ -2,19 +2,26 @@ import time as tim
 import pandas as pd
 
 from request_csv import csv_pddf
+from datetime import datetime
 
-# ________________________________________________________
-# list of "spotlight" tab options
-GENUS = ['',
+# -------------------------------------------------------
+# Parse constants that control what data we display
+
+# client-specified cutoff time before which data is less reliable
+FUZZY = datetime.strptime('2016', '%Y')
+delta_fuzzy = datetime.today() - FUZZY
+FUZZY_AGE = delta_fuzzy.days
+
+GENUS = ('',
          'Acer',
          'Magnolia',
          'Rhododendron',
          'Cornus',
          'Sorbus',
          'Clematis',
-         ]
-ATTRIBUTES = ['Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats']
-CACHE = []
+         )
+
+ATTRIBUTES = ('Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats')
 
 # list of bed codes not on the map
 EXCLUDED_PREFIXES = ['H',  # herbariums
@@ -22,22 +29,27 @@ EXCLUDED_PREFIXES = ['H',  # herbariums
                      '8',  # nursery
                      '9',  # unknown
                      ]
+# -------------------------------------------------------
+# store for today, before new csv drops tomorrow
+CACHE = []
+
+# -------------------------------------------------------
+# create one row of attributes for each bed
 
 
-# ________________________________________________________
 def make_df(genus):  # genus is string
     start = tim.time()
 
     # list of beds
     beds = []
-    # lists in which the ith entry corresponds to the ith bed in beds:
+    # per-bed data lists in which the ith entry corresponds to the ith bed in beds:
     # list of species lists
     species_in_bed = []
     # list of numbers
     # TODO refactor
     items_in_bed = []
-    labelled_in_bed = []
-    georecorded_in_bed = []
+    l_total_percent = []
+    g_total_percent = []
     # TODO implement, steal from another branch
     # l = labelled
     # g = geo-recorded
@@ -46,6 +58,7 @@ def make_df(genus):  # genus is string
     lgr = []
     l = []
     g = []
+    not_lg = []
 
 
 
@@ -74,9 +87,9 @@ def make_df(genus):  # genus is string
 
             # update tags
             if labelled:
-                labelled_in_bed[bed_location] = labelled_in_bed[bed_location] + 1
+                l_total_percent[bed_location] = l_total_percent[bed_location] + 1
             if georecorded:
-                georecorded_in_bed[bed_location] = georecorded_in_bed[bed_location] + 1
+                g_total_percent[bed_location] = g_total_percent[bed_location] + 1
 
             # update days since sighting
             ages_in_bed[bed_location].append(age)
@@ -106,14 +119,14 @@ def make_df(genus):  # genus is string
 
             # add tag baskets
             if labelled:
-                labelled_in_bed.append(1)
+                l_total_percent.append(1)
             else:
-                labelled_in_bed.append(0)
+                l_total_percent.append(0)
 
             if georecorded:
-                georecorded_in_bed.append(1)
+                g_total_percent.append(1)
             else:
-                georecorded_in_bed.append(0)
+                g_total_percent.append(0)
 
     assert 'HUBC' not in beds
 
@@ -126,8 +139,8 @@ def make_df(genus):  # genus is string
     for j in range(len(beds)):
         # -------------------------------------------------------
         # get tag as int percentage
-        labelled_in_bed[j] = int(labelled_in_bed[j] / items_in_bed[j] * 100)
-        georecorded_in_bed[j] = int(georecorded_in_bed[j] / items_in_bed[j] * 100)
+        l_total_percent[j] = int(l_total_percent[j] / items_in_bed[j] * 100)
+        g_total_percent[j] = int(g_total_percent[j] / items_in_bed[j] * 100)
 
         # -------------------------------------------------------
         # get species and genus count from species list
@@ -143,8 +156,8 @@ def make_df(genus):  # genus is string
     df = pd.DataFrame({'Bed': pd.Series(beds),  # each string occurs only once
                        'Species Count': pd.Series(species_cnts, dtype='int16'),
                        'Item Count': pd.Series(items_in_bed, dtype='int16'),
-                       'Label Stats': pd.Series(labelled_in_bed, dtype='int8'),
-                       'Geo-record Stats': pd.Series(georecorded_in_bed, dtype='int8'),
+                       'Label Stats': pd.Series(l_total_percent, dtype='int8'),
+                       'Geo-record Stats': pd.Series(g_total_percent, dtype='int8'),
                        'Days since sightings': pd.Series(ages_in_bed)
                        })
     df.set_index('Bed')
