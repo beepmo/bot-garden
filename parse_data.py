@@ -46,24 +46,18 @@ def make_df(genus):  # genus is string
     # list of species lists
     species_in_bed = []
     # list of numbers
-    # TODO refactor
     items_in_bed = []
     l_total_percent = []
     g_total_percent = []
     # TODO implement, steal from another branch
-    # l = labelled
+    '''# l = labelled
     # g = geo-recorded
     # r = reported after date
-    # counts, not percentages
+    # counts, not percentages'''
     lgr = []
     l = []
     g = []
     not_lg = []
-
-
-
-    # list of strin lists
-    ages_in_bed = []
 
     # populate the lists bed and species_in_bed
     for index, row in csv_pddf.iterrows():  # iterate over all rows of data
@@ -91,9 +85,6 @@ def make_df(genus):  # genus is string
             if georecorded:
                 g_total_percent[bed_location] = g_total_percent[bed_location] + 1
 
-            # update days since sighting
-            ages_in_bed[bed_location].append(age)
-
             # update item count
             items_in_bed[bed_location] = items_in_bed[bed_location] + 1
 
@@ -110,9 +101,6 @@ def make_df(genus):  # genus is string
 
             # add species as list
             species_in_bed.append([species])
-
-            # add age as list
-            ages_in_bed.append([age])
 
             # count item as list
             items_in_bed.append(1)
@@ -158,7 +146,6 @@ def make_df(genus):  # genus is string
                        'Item Count': pd.Series(items_in_bed, dtype='int16'),
                        'Label Stats': pd.Series(l_total_percent, dtype='int8'),
                        'Geo-record Stats': pd.Series(g_total_percent, dtype='int8'),
-                       'Days since sightings': pd.Series(ages_in_bed)
                        })
     df.set_index('Bed')
 
