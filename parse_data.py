@@ -33,6 +33,7 @@ EXCLUDED_PREFIXES = ['H',  # herbariums
 # store for today, before new csv drops tomorrow
 CACHE = []
 
+
 # -------------------------------------------------------
 # create one row of attributes for each bed
 
@@ -57,10 +58,12 @@ def make_df(genus):  # genus is string
     lgr = []
     l = []
     g = []
+    lg = []
     not_lg = []
 
     # populate the lists bed and species_in_bed
     for index, row in csv_pddf.iterrows():  # iterate over all rows of data
+
         species = row['Taxon']
 
         if genus and (species.partition(' ')[0] != genus):
@@ -80,13 +83,24 @@ def make_df(genus):  # genus is string
             bed_location = beds.index(bed)
 
             # update tags
-            if labelled:
-                l_total_percent[bed_location] = l_total_percent[bed_location] + 1
-            if georecorded:
-                g_total_percent[bed_location] = g_total_percent[bed_location] + 1
+            if labelled:  # total labelled
+                l_total_percent[bed_location] += 1
+                # we have not converted the counts to a percentage yet! will do after knowing item count per bed
+
+                if georecorded:  # labelled & geo-recorded
+                    lg[bed_location] += 1
+
+                    if age < FUZZY_AGE:  # labelled & geo-recorded & reported post-fuzzy
+                        lgr[bed_location] = lgr[bed_location] + 1
+
+                else: # not labelled; geo-recorded only
+                    l[bed_location] += 1
+
+            if georecorded:  # total geo-recorded
+                g_total_percent[bed_location] += 1
 
             # update item count
-            items_in_bed[bed_location] = items_in_bed[bed_location] + 1
+            items_in_bed[bed_location] += 1
 
             # update species
             in_this_bed = species_in_bed[bed_location]
@@ -106,8 +120,21 @@ def make_df(genus):  # genus is string
             items_in_bed.append(1)
 
             # add tag baskets
-            if labelled:
+            if labelled: # total labelled
                 l_total_percent.append(1)
+                # we have not converted the counts to a percentage yet! will do after knowing item count per bed
+
+                if georecorded:  # labelled & geo-recorded
+                    lg.append(1)
+
+                    if age < FUZZY_AGE:  # labelled & geo-recorded & reported post-fuzzy
+                        lgr.append(1)
+                    else:
+                        lgr.append(0)
+
+                else:
+                    lg.append(0)
+
             else:
                 l_total_percent.append(0)
 
