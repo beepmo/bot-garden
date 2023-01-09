@@ -3,7 +3,7 @@ import time
 
 all = 'All GARDENS'
 _4c = 'Carolinian Forest'
-# _1c = 'Contemporary Garden'
+_1c = 'Contemporary Garden'
 _1p = 'Winter Garden'
 alp = 'Alpine Garden'
 # laa = 'Alpine Australasia'
@@ -14,6 +14,7 @@ alp = 'Alpine Garden'
 # lcs = 'Alpine Cactus and Succulent'  # include 'LTC'
 # leu = 'Alpine Europe'
 
+
 GARDENS = [all, _4c, _1p, alp]
 
 
@@ -22,12 +23,12 @@ def build_pattern(array_of_gardens):
 
     if _4c in array_of_gardens:
         regex += '4C\d\d|'
-    # if _1c in array_of_gardens:
-    #     regex += '1C0\d|'
+    if _1c in array_of_gardens:
+        regex += '1C0\d|'
     if _1p in array_of_gardens:
         regex += '1P0\d|'
     if alp in array_of_gardens:
-        regex += 'LAA\d|LAF\d|LAS\d|LAM|LSA\d|LSA\d|LNA\d|LCS\d|LTC\d|LEU\d|'
+        regex += 'LAA\d|LAF\d|LAS\d|LAM|LSA\d|LSA\d|LNA\d|LCS\d|LTC\d|LEU\d|LFE|'
     # # if laf in array_of_gardens:
     # #     regex += 'LAF\d|'
     # if las in array_of_gardens:

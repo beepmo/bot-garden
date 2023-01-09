@@ -3,6 +3,7 @@ import pandas as pd
 
 from request_csv import csv_pddf
 
+# ________________________________________________________
 # list of "spotlight" tab options
 GENUS = ['',
          'Acer',
@@ -15,6 +16,15 @@ GENUS = ['',
 ATTRIBUTES = ['Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats']
 CACHE = []
 
+# list of bed codes not on the map
+EXCLUDED_PREFIXES = ['H',  # herbariums
+                     '5',  # nitobe
+                     '8',  # nursery
+                     '9',  # unknown
+                     ]
+
+
+# ________________________________________________________
 def make_df(genus):  # genus is string
     start = tim.time()
 
@@ -39,7 +49,7 @@ def make_df(genus):  # genus is string
 
         bed = row['Bed']
         # just for this data source
-        if bed == 'HUBC':
+        if bed == 'HUBC' or bed == 'HBG' or bed == 'HEXT':
             continue
 
         labelled = row['Label']
@@ -104,8 +114,8 @@ def make_df(genus):  # genus is string
     for j in range(len(beds)):
         # -------------------------------------------------------
         # get tag as int percentage
-        labelled_in_bed[j] = int(labelled_in_bed[j]/items_in_bed[j] * 100)
-        georecorded_in_bed[j] = int(georecorded_in_bed[j]/items_in_bed[j] * 100)
+        labelled_in_bed[j] = int(labelled_in_bed[j] / items_in_bed[j] * 100)
+        georecorded_in_bed[j] = int(georecorded_in_bed[j] / items_in_bed[j] * 100)
 
         # -------------------------------------------------------
         # get species and genus count from species list
@@ -125,6 +135,7 @@ def make_df(genus):  # genus is string
                        'Geo-record Stats': pd.Series(georecorded_in_bed, dtype='int8'),
                        'Days since sightings': pd.Series(ages_in_bed)
                        })
+    df.set_index('Bed')
 
     # clock
     parse_data_end = tim.time()
@@ -132,7 +143,7 @@ def make_df(genus):  # genus is string
     memory = df.memory_usage(deep=True)
 
     print(f'Time taken to parse csv df into plottable df: {(parse_data_end - start):f}.\n'
-          f'Memory used: \n {memory}.')
+          f'Memory used: \n{memory}.')
 
     return df
 
@@ -143,4 +154,3 @@ def make_df(genus):  # genus is string
 if len(CACHE) == 0:
     for g in GENUS:
         CACHE.append(make_df(g))
-
