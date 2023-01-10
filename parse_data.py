@@ -34,13 +34,11 @@ EXCLUDED_PREFIXES = ['H',  # herbariums
 # store for today, before new csv drops tomorrow
 CACHE = []
 
-
 # -------------------------------------------------------
 # lists to build into df series
 
 # list of beds
 beds = []
-
 
 # per-bed data lists in which the ith entry corresponds to the ith bed in beds:
 
@@ -62,14 +60,13 @@ g = []
 lg = []
 not_lg = []
 
+
 # -------------------------------------------------------
 # create one row of attributes for each bed
 
 
 def make_df(genus):  # genus is string
     start = tim.time()
-
-
 
     # populate the lists bed and species_in_bed
     for index, row in csv_pddf.iterrows():  # iterate over all rows of data
@@ -88,26 +85,20 @@ def make_df(genus):  # genus is string
         georecorded = row['Geo?']
         age = row['Days Since Sighted']
 
-        try:
+        if bed in beds:
             # bed is in beds
             bed_location = beds.index(bed)
 
-            # update tags
-            if labelled:  # total labelled
-                l_total_percent[bed_location] += 1
-                # we have not converted the counts to a percentage yet! will do after knowing item count per bed
+            # affirmative action for item in known bed
+            def increment_here(list):
+                list[bed_location] = 1  # TODO revert
 
-                if georecorded:  # labelled & geo-recorded
-                    lg[bed_location] += 1
-
-                    if age < FUZZY_AGE:  # labelled & geo-recorded & reported post-fuzzy
-                        lgr[bed_location] = lgr[bed_location] + 1
-
-                else:  # not labelled; geo-recorded only
-                    l[bed_location] += 1
-
-            if georecorded:  # total geo-recorded
-                g_total_percent[bed_location] += 1
+            try:
+                process_item(increment_here, do_nothing, labelled, georecorded, age)
+            except IndexError:
+                print(f'Length of label totals list: {len(l_total_percent)}\n'
+                      f'Length of geore totals list: {len(g_total_percent)}\n'
+                      f'Length od beds: {len(beds)}')
 
             # update item count
             items_in_bed[bed_location] += 1
@@ -117,7 +108,7 @@ def make_df(genus):  # genus is string
             if not species in in_this_bed:
                 in_this_bed.append(species)
 
-        except ValueError:
+        else:
             # bed is not in beds
 
             # add bed to beds
@@ -200,14 +191,9 @@ def make_df(genus):  # genus is string
 # ______________________________________________________
 # helpers
 
-# affirmative action for item in known bed
-def increment_here(list, index):
-    list[index] += 1
-
-
 # negative action for item in new (insofar unknown) bed
-def do_nothing():
-    pass
+def do_nothing(list):
+    return 0
 
 
 # affirmative action for item in new (insofar unknown) bed
@@ -221,18 +207,40 @@ def append_0(list):
 
 
 def process_item(yes_action, no_action, labelled, georecorded, age):
+
     if labelled:  # total labelled
         yes_action(l_total_percent)
         # we have not converted the counts to a percentage yet! will do after knowing item count per bed
+    else:
+        no_action(l_total_percent)
 
     if georecorded:  # total georecorded
         yes_action(g_total_percent)
+    else:
+        no_action(g_total_percent)
+
+    if labelled and georecorded:
+        yes_action(lg)
+    else:
+        no_action(lg)
+
+    if labelled and georecorded and age < FUZZY_AGE:
+        yes_action(lgr)
+    else:
+        no_action(lgr)
+
+    if not (labelled or georecorded):
+        yes_action(not_lg)
+    else:
+        no_action(lg)
 
 
 # -------------------------------------------------------
 # make sure make_df loop is run only once. same with mock
 # I see that it gets run twice anyways: before building flask app and after
+make_df('')
 
+'''
 if len(CACHE) == 0:
     for g in GENUS:
-        CACHE.append(make_df(g))
+        CACHE.append(make_df(g))'''
