@@ -30,6 +30,18 @@ EXCLUDED_PREFIXES = ['H',  # herbariums
                      '9',  # unknown
                      ]
 
+
+# -------------------------------------------------------
+# Parsed dataframe column names
+
+L_ONLY = 'Labelled, not geo-recorded'
+G_ONLY = 'Geo-recorded, not labelled'
+L_AND_G = 'Labelled and Geo-recorded'
+NOT_L_NOR_G = 'Not labelled nor geo-recorded'
+LGPF = 'Labelled, Geo-recorded, Post-Fuzzy'
+
+ITEMS = 'Item Count'
+
 # -------------------------------------------------------
 # store for today, before new csv drops tomorrow
 CACHE = []
@@ -105,7 +117,7 @@ def make_df(genus):  # genus is string
                 return
 
             try:
-                process_item(increment_here, do_nothing,
+                process_item(increment_here, lambda list: None,
                              labelled, georecorded, age,
                              l_total_percent, g_total_percent, lg, lgr, not_lg, l, g)
             except IndexError:
@@ -184,6 +196,11 @@ def make_df(genus):  # genus is string
                        'Item Count': pd.Series(items_in_bed, dtype='int16'),
                        'Label Stats': pd.Series(l_total_percent, dtype='int8'),
                        'Geo-record Stats': pd.Series(g_total_percent, dtype='int8'),
+                       L_ONLY: pd.Series(l, dtype='int16'),
+                       G_ONLY: pd.Series(g, dtype='int16'),
+                       L_AND_G: pd.Series(lg, dtype='int16'),
+                       NOT_L_NOR_G: pd.Series(not_lg, dtype='int16'),
+                       LGPF: pd.Series(lgr, dtype='int16')
                        })
     df.set_index('Bed')
 
@@ -198,24 +215,8 @@ def make_df(genus):  # genus is string
     return df
 
 
-# ______________________________________________________
-# helpers
-
-# negative action for item in new (insofar unknown) bed
-def do_nothing(list):
-    pass
-
-
-# affirmative action for item in new (insofar unknown) bed
-def append_1(list):
-    list.append(1)
-
-
-# negative action for item in new (insofar unknown) bed
-def append_0(list):
-    list.append(0)
-
-
+# -------------------------------------------------------
+# helper to reduce code duplication
 def process_item(yes_action, no_action, labelled, georecorded, age, l_total, g_total, lg, lgr, not_lg, l, g):
     if labelled:  # total labelled
         yes_action(l_total)
@@ -262,3 +263,5 @@ if len(CACHE) == 0:
     for genus in GENUS:
         CACHE.append(make_df(genus))
 
+# df = CACHE[0]
+# sunburst = df[[L_ONLY,G_ONLY,L_AND_G,LGPF,NOT_L_NOR_G]]

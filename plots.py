@@ -119,3 +119,33 @@ def bar(attribute, filtered_df, hover_prep):
     fig.update_yaxes(fixedrange=False)
 
     return fig
+
+
+import parse_data as pard
+
+
+def sunburst(filtered_df):
+
+    names = [pard.ITEMS, pard.NOT_L_NOR_G, pard.G_ONLY, pard.L_AND_G, pard.LGPF, pard.L_ONLY]
+
+    sunburst_df = filtered_df[names]
+
+    sum = sunburst_df.sum()
+
+    sunburst_data = dict(
+        names=(pard.ITEMS, pard.NOT_L_NOR_G, pard.G_ONLY, pard.L_AND_G, pard.LGPF, pard.L_ONLY),
+        parents=('', 'Item Count', 'Item Count', 'Item Count', pard.L_AND_G, 'Item Count'),
+        count=sum,
+        # color_discrete_map=('blue','gold','darkblue','cyan','yellow'),
+    )
+
+    fig = px.sunburst(
+        sunburst_data,
+        names='names',
+        parents='parents',
+        values='count',
+        template='ggplot2',
+        hover_data={'parents': False},
+    )
+
+    return fig

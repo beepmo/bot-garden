@@ -6,6 +6,7 @@ from dash.dependencies import Input, Output
 # my functions
 from plots import chloropleth
 from plots import bar
+from plots import sunburst
 from filter_data import filter_bed
 
 # _______________________________________________________________
@@ -172,6 +173,23 @@ app.layout = html.Div(
                         className="wrapper",
                     ),
 
+                    # wrapper of sunburst card
+                    html.Div(
+                        children=[
+                            html.Div(
+                                children=[
+
+                                    # sunburst plot
+                                    dcc.Graph(
+                                        id="sunburst", config={"displayModeBar": False},
+                                    ),
+                                ],
+                                className="card",
+                            ),
+                        ],
+                        className="wrapper",
+                    ),
+
                     # bottom section containing big numbers
                     html.Div(
                         children=[
@@ -199,7 +217,8 @@ app.layout = html.Div(
 @app.callback(
     [
         Output("chloropleth", "figure"),
-        Output("bar", "figure")
+        Output("bar", "figure"),
+        Output("sunburst", "figure"),
     ],
     [
         Input(component_id=s_genus, component_property='value'),
@@ -209,7 +228,7 @@ app.layout = html.Div(
 )
 def plots(genus_index, attribute, gardens):
     filtered_df = filter_bed(CACHE[genus_index], set(gardens))  # convert list to set
-    return [chloropleth(attribute, filtered_df), bar(attribute, filtered_df)]
+    return [chloropleth(attribute, filtered_df), bar(attribute, filtered_df), sunburst(filtered_df)]
     # this callback expects list.
 
 
