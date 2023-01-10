@@ -8,6 +8,7 @@ from plots import chloropleth
 from plots import bar
 from plots import sunburst
 from plots import box
+from plots import pc_line
 from filter_data import filter_bed
 
 # _______________________________________________________________
@@ -55,10 +56,6 @@ app.layout = html.Div(
                 # html.P(children="🥑", className="header-emoji"),
                 html.Img(src=logo_image, className="header-logo",
                          style={'textAlign': 'center'}),
-                # html.H3(
-                #     children="Botanical Garden", className="header-title"
-                # ),
-                # TODO left justify
             ],
             className="header",
         ),
@@ -242,6 +239,85 @@ app.layout = html.Div(
 
                 # tab 2: history by garden
                 dcc.Tab(label='History by Garden', children=[
+                    # preamble for 'history by garden' tab
+                    html.Div(
+                        children=[
+                            html.P(
+                                children='''Choose a set of gardens to see a summary of its changes over time.
+                                        ''',
+                                className="header-description",
+                            ),
+                        ],
+                        className="tab-header",
+                    ),
+
+                    # menu
+                    html.Div(
+                        children=[
+
+                            # garden selector
+                            html.Div(
+                                children=[
+                                    html.Div(children="Select Gardens", className="menu-title"),
+                                    dcc.Dropdown(
+                                        # id=s_gardens,
+                                        options=[
+                                            {"label": garden, "value": garden}
+                                            for garden in GARDENS
+                                        ],
+                                        value=('Alpine Garden', 'Winter Garden'),
+                                        clearable=True,
+                                        searchable=True,
+                                        multi=True,
+                                        className="dropdown",
+                                    ),
+                                ],
+                            ),
+                        ],
+                        className="menu",
+                    ),
+
+                    # wrapper of linechart card
+                    html.Div(
+                        children=[
+                            html.Div(
+                                children=[
+
+                                    # sunburst plot
+                                    dcc.Graph(
+                                        figure=pc_line(),
+                                    ),
+
+                                    html.P(children='Percent items labelled and geo-recorded over time',
+                                           className='fig-description',
+                                           ),
+                                ],
+                                className="card",
+                            ),
+                        ],
+                        className="wrapper",
+                    ),
+
+                    # wrapper of linechart card
+                    html.Div(
+                        children=[
+                            html.Div(
+                                children=[
+
+                                    # sunburst plot
+                                    dcc.Graph(
+                                        figure=pc_line(),
+                                    ),
+
+                                    html.P(children='Item and species counts over time',
+                                           className='fig-description',
+                                           ),
+                                ],
+                                className="card",
+                            ),
+                        ],
+                        className="wrapper",
+                    ),
                 ]),
 
                 # tab 3: history by genus

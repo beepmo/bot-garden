@@ -81,6 +81,8 @@ def chloropleth(attribute, filtered_df, hover_prep):
 
         # decorator
         hover_data=hover_prep,
+
+        # title='Choropleth map: geospatial view of attribute',
     )
 
     # if fitbounds is not set, the entire globe is shown
@@ -145,6 +147,7 @@ def sunburst(filtered_df):
         values='count',
         template='ggplot2',
         hover_data={'parents': False},
+        # title='Sunburst plot: relation between labels, geo-records, and recency',
     )
 
     return fig
@@ -160,4 +163,14 @@ def box(filtered_df):
     fig.update_xaxes(rangeslider_visible=True)
     fig.update_yaxes(fixedrange=False)
 
+    return fig
+
+
+def pc_line():
+    df = px.data.gapminder().query("continent == 'Oceania'")
+    fig = px.line(df, x='year', y='lifeExp', color='country', symbol="country",
+                  labels={'year': 'Date',
+                          'lifeExp': 'Percentage',
+                          'country': 'Attribute',
+                          })
     return fig
