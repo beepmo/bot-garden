@@ -125,7 +125,6 @@ import parse_data as pard
 
 
 def sunburst(filtered_df):
-
     names = [pard.ITEMS, pard.NOT_L_NOR_G, pard.G_ONLY, pard.L_AND_G, pard.LGPF, pard.L_ONLY]
 
     sunburst_df = filtered_df[names]
@@ -147,5 +146,18 @@ def sunburst(filtered_df):
         template='ggplot2',
         hover_data={'parents': False},
     )
+
+    return fig
+
+
+from request_csv import csv_pddf
+
+
+def box(filtered_df):
+    fig = px.box(csv_pddf, x='Bed', y='Days Since Sighted')
+
+    fig.update_layout(xaxis={'categoryorder': 'total descending'})
+    fig.update_xaxes(rangeslider_visible=True)
+    fig.update_yaxes(fixedrange=False)
 
     return fig

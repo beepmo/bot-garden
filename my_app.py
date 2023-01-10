@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output
 from plots import chloropleth
 from plots import bar
 from plots import sunburst
+from plots import box
 from filter_data import filter_bed
 
 # _______________________________________________________________
@@ -27,6 +28,9 @@ logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
 
 # _______________________________________________________________
 # variables
+
+# for BOX
+from request_csv import csv_pddf
 
 # selection options & THE DATA
 from parse_data import ATTRIBUTES, GENUS, CACHE
@@ -203,7 +207,29 @@ app.layout = html.Div(
                         className="wrapper",
                     ),
 
-                    # bottom section containing big numbers
+                    # wrapper of box card
+                    html.Div(
+                        children=[
+                            html.Div(
+                                children=[
+
+                                    # box plot
+                                    dcc.Graph(
+                                        id="box", config={"displayModeBar": True},
+                                    ),
+
+                                    html.P(children='Box plot, sorted: where lurk the ancients? '
+                                                    '(Genus filter not yet supported!)',
+                                           className='fig-description',
+                                           ),
+                                ],
+                                className="card",
+                            ),
+                        ],
+                        className="wrapper",
+                    ),
+
+                    # bottom band
                     html.Div(
                         children=[
                             html.H1(children=''),
@@ -232,6 +258,7 @@ app.layout = html.Div(
         Output("chloropleth", "figure"),
         Output("bar", "figure"),
         Output("sunburst", "figure"),
+        Output("box", "figure")
     ],
     [
         Input(component_id=s_genus, component_property='value'),
@@ -240,8 +267,15 @@ app.layout = html.Div(
     ],
 )
 def plots(genus_index, attribute, gardens):
-    filtered_df = filter_bed(CACHE[genus_index], set(gardens))  # convert list to set
-    return [chloropleth(attribute, filtered_df), bar(attribute, filtered_df), sunburst(filtered_df)]
+    gardens = set(gardens)
+    filtered_df = filter_bed(CACHE[genus_index], gardens)  # convert list to set
+    df_for_box = filter_bed(csv_pddf, gardens)
+
+    return [chloropleth(attribute, filtered_df),
+            bar(attribute, filtered_df),
+            sunburst(filtered_df),
+            box(df_for_box),
+            ]
     # this callback expects list.
 
 
