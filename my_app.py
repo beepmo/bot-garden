@@ -71,7 +71,8 @@ app.layout = html.Div(
                             # html.P(children="🥑", className="header-emoji"),
 
                             html.P(
-                                children='''Select a set of gardens and an attribute. Option: filter to one genus.
+                                children='''Filter by gardens and genus!
+                                Specify an attribute to display on the map and bar plots.
                                         ''',
                                 className="header-description",
                             ),
@@ -149,6 +150,10 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="chloropleth", config={"displayModeBar": True},
                                     ),
+
+                                    html.P(children='Choropleth map: geospatial view of attribute',
+                                           className='fig-description',
+                                           ),
                                 ],
                                 className="card",
                             ),
@@ -166,6 +171,10 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="bar", config={"displayModeBar": True},
                                     ),
+
+                                    html.P(children='Bar chart: sorting by attribute value',
+                                           className='fig-description',
+                                           ),
                                 ],
                                 className="card",
                             ),
@@ -183,6 +192,10 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="sunburst", config={"displayModeBar": False},
                                     ),
+
+                                    html.P(children='Sunburst plot: relation between labels, geo-records, and recency',
+                                           className='fig-description',
+                                           ),
                                 ],
                                 className="card",
                             ),
