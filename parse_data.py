@@ -29,10 +29,38 @@ EXCLUDED_PREFIXES = ['H',  # herbariums
                      '8',  # nursery
                      '9',  # unknown
                      ]
+
 # -------------------------------------------------------
 # store for today, before new csv drops tomorrow
 CACHE = []
 
+
+# -------------------------------------------------------
+# lists to build into df series
+
+# list of beds
+beds = []
+
+
+# per-bed data lists in which the ith entry corresponds to the ith bed in beds:
+
+# list of species lists
+species_in_bed = []
+
+# list of numbers
+items_in_bed = []
+l_total_percent = []
+g_total_percent = []
+
+'''# l = labelled
+# g = geo-recorded
+# r = reported after date
+# counts, not percentages'''
+lgr = []
+l = []
+g = []
+lg = []
+not_lg = []
 
 # -------------------------------------------------------
 # create one row of attributes for each bed
@@ -41,25 +69,7 @@ CACHE = []
 def make_df(genus):  # genus is string
     start = tim.time()
 
-    # list of beds
-    beds = []
-    # per-bed data lists in which the ith entry corresponds to the ith bed in beds:
-    # list of species lists
-    species_in_bed = []
-    # list of numbers
-    items_in_bed = []
-    l_total_percent = []
-    g_total_percent = []
-    # TODO implement, steal from another branch
-    '''# l = labelled
-    # g = geo-recorded
-    # r = reported after date
-    # counts, not percentages'''
-    lgr = []
-    l = []
-    g = []
-    lg = []
-    not_lg = []
+
 
     # populate the lists bed and species_in_bed
     for index, row in csv_pddf.iterrows():  # iterate over all rows of data
@@ -93,7 +103,7 @@ def make_df(genus):  # genus is string
                     if age < FUZZY_AGE:  # labelled & geo-recorded & reported post-fuzzy
                         lgr[bed_location] = lgr[bed_location] + 1
 
-                else: # not labelled; geo-recorded only
+                else:  # not labelled; geo-recorded only
                     l[bed_location] += 1
 
             if georecorded:  # total geo-recorded
@@ -120,7 +130,7 @@ def make_df(genus):  # genus is string
             items_in_bed.append(1)
 
             # add tag baskets
-            if labelled: # total labelled
+            if labelled:  # total labelled
                 l_total_percent.append(1)
                 # we have not converted the counts to a percentage yet! will do after knowing item count per bed
 
@@ -187,6 +197,39 @@ def make_df(genus):  # genus is string
     return df
 
 
+# ______________________________________________________
+# helpers
+
+# affirmative action for item in known bed
+def increment_here(list, index):
+    list[index] += 1
+
+
+# negative action for item in new (insofar unknown) bed
+def do_nothing():
+    pass
+
+
+# affirmative action for item in new (insofar unknown) bed
+def append_1(list):
+    list.append(1)
+
+
+# negative action for item in new (insofar unknown) bed
+def append_0(list):
+    list.append(0)
+
+
+def process_item(yes_action, no_action, labelled, georecorded, age):
+    if labelled:  # total labelled
+        yes_action(l_total_percent)
+        # we have not converted the counts to a percentage yet! will do after knowing item count per bed
+
+    if georecorded:  # total georecorded
+        yes_action(g_total_percent)
+
+
+# -------------------------------------------------------
 # make sure make_df loop is run only once. same with mock
 # I see that it gets run twice anyways: before building flask app and after
 
