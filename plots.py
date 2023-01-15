@@ -7,12 +7,17 @@ import json
 with open('entire.geojson') as raw_map:
     marauders = json.load(raw_map)
 
+# replace bed hover with hover_name
 hover_prep = {'Bed': False}
 
 
-def beautify(plotter):
+# complications of percent_handler
+def percent_handler(plotter):
     @functools.wraps(plotter)
-    def wrapper(attribute, df):
+    def wrapper(attribute,
+                df):
+        # ____________________________________________________________________________________
+        # alter data to make fig: add counts and format percentages
         percent_needed = attribute == 'Label Stats' or attribute == 'Geo-record Stats'
 
         # make hoverdata from attribute
@@ -26,17 +31,23 @@ def beautify(plotter):
                 '# Geo-recorded': (':.0f', df['Geo-record Stats'] / 100 * df['Item Count']),
             })
 
-            # run plot
-            fig = plotter(attribute, df, hover_prep)
+        # ____________________________________________________________________________________
+        # make fig
+        fig = plotter(attribute=attribute,
+                      df=df)
 
-            # bar plot
-            fig.update_layout(yaxis_ticksuffix='%')
-            # chloropleth
-            fig.update_coloraxes(colorbar_ticksuffix='%')
 
-        else:
-            # run plot
-            fig = plotter(attribute, df, hover_prep)
+# post-processing needed for all plots
+def beautify(plotter):
+    hover_prep = {'Bed': False}
+
+    @functools.wraps(plotter)
+    def wrapper(attribute, df):
+
+
+
+        # ____________________________________________________________________________________
+        # cosmetics
 
         # smooth transition when updated
         fig.update_layout(transition_duration=500)
@@ -47,7 +58,22 @@ def beautify(plotter):
                 font_size=16,
                 font_family="Rockwell"
             ),
+            # title_x=0.5,
+            # title_y=0,
         )
+
+        # slider for box and bar plots
+        fig.update_layout(xaxis={'categoryorder': 'total descending'})
+        fig.update_xaxes(rangeslider_visible=True)
+        fig.update_yaxes(fixedrange=False)
+
+        # ____________________________________________________________________________________
+        # cosmetics for percent_handler sign
+        if percent_needed:
+            # bar plot
+            fig.update_layout(yaxis_ticksuffix='%')
+            # chloropleth
+            fig.update_coloraxes(colorbar_ticksuffix='%')
 
         return fig
 
@@ -56,7 +82,7 @@ def beautify(plotter):
 
 # REQUIRES: attribute is 'Species Count' or 'Genus count'
 @beautify
-def chloropleth(attribute, filtered_df, hover_prep):
+def chloropleth(attribute, filtered_df):
     fig = px.choropleth(
         # pandas dataframe
         filtered_df,
@@ -116,17 +142,15 @@ def bar(attribute, filtered_df, hover_prep):
                            hover_data=hover_prep,
                            ))
 
-    fig.update_layout(xaxis={'categoryorder': 'total descending'})
-    fig.update_xaxes(rangeslider_visible=True)
-    fig.update_yaxes(fixedrange=False)
-
     return fig
 
 
 import parse_data as pard
 
 
-def sunburst(filtered_df):
+@beautify
+# take dummy variable attribute
+def sunburst(attribute, filtered_df):
     names = [pard.ITEMS, pard.NOT_L_NOR_G, pard.G_ONLY, pard.L_AND_G, pard.LGPF, pard.L_ONLY]
 
     sunburst_df = filtered_df[names]
@@ -153,15 +177,13 @@ def sunburst(filtered_df):
     return fig
 
 
-from request_csv import csv_pddf
-
-
-def box(filtered_df):
-    fig = px.box(csv_pddf, x='Bed', y='Days Since Sighted')
-
-    fig.update_layout(xaxis={'categoryorder': 'total descending'})
-    fig.update_xaxes(rangeslider_visible=True)
-    fig.update_yaxes(fixedrange=False)
+@beautify
+# take dummy parameters to appease decorator
+def box(attribute, filtered_df):
+    fig = px.box(filtered_df,
+                 x='Bed',
+                 y='Days Since Sighted',
+                 hover_name='Bed')
 
     return fig
 
@@ -173,4 +195,5 @@ def pc_line():
                           'lifeExp': 'Percentage',
                           'country': 'Attribute',
                           })
+
     return fig

@@ -283,7 +283,6 @@ app.layout = html.Div(
                             html.Div(
                                 children=[
 
-                                    # sunburst plot
                                     dcc.Graph(
                                         figure=pc_line(),
                                     ),
@@ -304,7 +303,6 @@ app.layout = html.Div(
                             html.Div(
                                 children=[
 
-                                    # sunburst plot
                                     dcc.Graph(
                                         figure=pc_line(),
                                     ),
@@ -349,8 +347,8 @@ def plots(genus_index, attribute, gardens):
 
     return [chloropleth(attribute, filtered_df),
             bar(attribute, filtered_df),
-            sunburst(filtered_df),
-            box(df_for_box),
+            sunburst(attribute, filtered_df),
+            box(attribute, df_for_box),
             ]
     # this callback expects list.
 

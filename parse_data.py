@@ -204,13 +204,14 @@ def make_df(genus):  # genus is string
                        })
     df.set_index('Bed')
 
+    '''
     # clock
     parse_data_end = tim.time()
     # check memory
     memory = df.memory_usage(deep=True)
 
     print(f'Time taken to parse csv df into plottable df: {(parse_data_end - start):f}.\n'
-          f'Memory used: \n{memory}.')
+          f'Memory used: \n{memory}.')'''
 
     return df
 

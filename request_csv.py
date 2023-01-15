@@ -79,7 +79,7 @@ csv_pddf = csv_pddf.astype({'Days Since Sighted': 'int32'}, copy=False)
 end_csv = time.time()
 memory = csv_pddf.memory_usage(deep=True)
 
-print(f'Time taken to read csv into df: {(end_csv - start_csv):f}.\n'
+'''print(f'Time taken to read csv into df: {(end_csv - start_csv):f}.\n'
       f'Memory usage: \n {memory}')
 
-print(csv_pddf.head())
+print(csv_pddf.head())'''
