@@ -36,6 +36,17 @@ def percent_handler(plotter):
         fig = plotter(attribute=attribute,
                       df=df)
 
+        # ____________________________________________________________________________________
+        # cosmetics for percent_handler sign
+        if percent_needed:
+            # bar plot
+            fig.update_layout(yaxis_ticksuffix='%')
+            # chloropleth
+            fig.update_coloraxes(colorbar_ticksuffix='%')
+
+        return fig
+    return wrapper
+
 
 # post-processing needed for all plots
 def beautify(plotter):
@@ -44,7 +55,7 @@ def beautify(plotter):
     @functools.wraps(plotter)
     def wrapper(attribute, df):
 
-
+        fig = plotter(attribute, df)
 
         # ____________________________________________________________________________________
         # cosmetics
@@ -66,14 +77,6 @@ def beautify(plotter):
         fig.update_layout(xaxis={'categoryorder': 'total descending'})
         fig.update_xaxes(rangeslider_visible=True)
         fig.update_yaxes(fixedrange=False)
-
-        # ____________________________________________________________________________________
-        # cosmetics for percent_handler sign
-        if percent_needed:
-            # bar plot
-            fig.update_layout(yaxis_ticksuffix='%')
-            # chloropleth
-            fig.update_coloraxes(colorbar_ticksuffix='%')
 
         return fig
 
@@ -133,7 +136,7 @@ def chloropleth(attribute, filtered_df):
 
 
 @beautify
-def bar(attribute, filtered_df, hover_prep):
+def bar(attribute, filtered_df):
     fig = go.Figure(px.bar(filtered_df,
                            x='Bed',
                            y=attribute,
