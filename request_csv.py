@@ -21,15 +21,12 @@ github_session.auth = (username, pat)
 # -------------------------------------------------------
 # Downloading the csv_pddf file from GitHub
 
-url = 'https://raw.githubusercontent.com/beepmo/gardens/main/' \
-      + 'dashboard_food.csv_pddf?token=GHSAT0AAAAAAB4Y6LCO7PDEY5NL4O76IHFEY5OJJKQ'
+url = 'https://raw.githubusercontent.com/beepmo/gardens/main/dashboard_food.csv?token=GHSAT0AAAAAAB4Y6LCPS6XR6XB6A32VBDGOY6XGHWQ'
 
 result = github_session.get(url)
 
 status = result.status_code
-# assert status != 404
-# >>> AssertionError
-# FIXME: 404 error. I had to make local csv to test other features
+assert status != 404
 
 download = result.content
 
@@ -64,7 +61,8 @@ def to_bool(label):
 
 
 start_csv = time.time()
-csv_pddf = pd.read_csv('dashboard_food.csv',
+# noinspection PyTypeChecker
+csv_pddf = pd.read_csv(io.StringIO(download.decode('utf-8')),
                        header=0,
                        names=['Bed', 'Label', 'Geo?', 'Status', 'Days Since Sighted', 'Taxon'],
                        converters={'Geo?': to_bool,
