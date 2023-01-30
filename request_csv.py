@@ -21,7 +21,7 @@ github_session.auth = (username, pat)
 # -------------------------------------------------------
 # Downloading the csv_pddf file from GitHub
 
-url = 'https://raw.githubusercontent.com/beepmo/gardens/main/dashboard_food.csv?token=GHSAT0AAAAAAB4Y6LCPS6XR6XB6A32VBDGOY6XGHWQ'
+url = 'https://raw.githubusercontent.com/beepmo/gardens/main/dashboard_food.csv?token=GHSAT0AAAAAAB4Y6LCOT56H4RHZEM73B7LAY6XIRMQ'
 
 result = github_session.get(url)
 
@@ -63,8 +63,11 @@ def to_bool(label):
 start_csv = time.time()
 # noinspection PyTypeChecker
 csv_pddf = pd.read_csv(io.StringIO(download.decode('utf-8')),
-                       header=0,
-                       names=['Bed', 'Label', 'Geo?', 'Status', 'Days Since Sighted', 'Taxon'],
+
+                       # replace header names
+                       header=0,  # do not infer headers from columns
+                       names=['Bed', 'Label', 'Geo?', 'Days Since Sighted', 'Taxon'],
+
                        converters={'Geo?': to_bool,
                                    'Label': to_bool,
                                    'Days Since Sighted': days_since
@@ -77,7 +80,10 @@ csv_pddf = csv_pddf.astype({'Days Since Sighted': 'int32'}, copy=False)
 end_csv = time.time()
 memory = csv_pddf.memory_usage(deep=True)
 
-'''print(f'Time taken to read csv into df: {(end_csv - start_csv):f}.\n'
-      f'Memory usage: \n {memory}')
+''' quick debug
 
-print(csv_pddf.head())'''
+print(f'Time taken to read csv into df: {(end_csv - start_csv):f}.\n'
+      f'Memory usage: \n {memory}')
+'''
+print(csv_pddf.head())
+

@@ -3,7 +3,7 @@
 For use by UBC Botanical Garden.
 
 ## User guide
-Visit [bot-garden-url] to get started!
+Web app URL is presently not disclosed.
 
 ### Features
 - detailed snapshot
@@ -13,11 +13,11 @@ Visit [bot-garden-url] to get started!
 
 Please consult and document design decisions in [design-choices-url]. 
 
-Links/writeups for niche parts of the project can be found in [beep's work log].
+Links/writeups for niche parts of the project can be found in [beep's Obsidian work log].
 
 ## Thanks
 
 Botanical Garden for being amazing.
 
-(May I thank D. Mosquin, L. Hockley by name for providing data?)
+D. Mosquin, L. Hockley for providing directions and data.
 
