@@ -6,6 +6,9 @@ from dash.dependencies import Input, Output
 # my functions
 from plots import chloropleth
 from plots import bar
+from plots import sunburst
+from plots import box
+from plots import pc_line
 from filter_data import filter_bed
 
 # _______________________________________________________________
@@ -26,6 +29,9 @@ logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
 
 # _______________________________________________________________
 # variables
+
+# for BOX
+from request_csv import csv_pddf
 
 # selection options & THE DATA
 from parse_data import ATTRIBUTES, GENUS, CACHE
@@ -50,10 +56,6 @@ app.layout = html.Div(
                 # html.P(children="🥑", className="header-emoji"),
                 html.Img(src=logo_image, className="header-logo",
                          style={'textAlign': 'center'}),
-                # html.H3(
-                #     children="Botanical Garden", className="header-title"
-                # ),
-                # TODO left justify
             ],
             className="header",
         ),
@@ -70,7 +72,8 @@ app.layout = html.Div(
                             # html.P(children="🥑", className="header-emoji"),
 
                             html.P(
-                                children='''Select a set of gardens and an attribute. Option: filter to one genus.
+                                children='''Filter by gardens and genus!
+                                Specify an attribute to display on the map and bar plots.
                                         ''',
                                 className="header-description",
                             ),
@@ -109,7 +112,7 @@ app.layout = html.Div(
                                             {"label": garden, "value": garden}
                                             for garden in GARDENS
                                         ],
-                                        value=['Alpine Garden', 'Winter Garden'],
+                                        value=('Alpine Garden', 'Winter Garden'),
                                         clearable=True,
                                         searchable=True,
                                         multi=True,
@@ -148,6 +151,10 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="chloropleth", config={"displayModeBar": True},
                                     ),
+
+                                    html.P(children='Choropleth map: geospatial view of attribute',
+                                           className='fig-description',
+                                           ),
                                 ],
                                 className="card",
                             ),
@@ -165,6 +172,10 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="bar", config={"displayModeBar": True},
                                     ),
+
+                                    html.P(children='Bar chart: sorting by attribute value',
+                                           className='fig-description',
+                                           ),
                                 ],
                                 className="card",
                             ),
@@ -172,7 +183,50 @@ app.layout = html.Div(
                         className="wrapper",
                     ),
 
-                    # bottom section containing big numbers
+                    # wrapper of sunburst card
+                    html.Div(
+                        children=[
+                            html.Div(
+                                children=[
+
+                                    # sunburst plot
+                                    dcc.Graph(
+                                        id="sunburst", config={"displayModeBar": False},
+                                    ),
+
+                                    html.P(children='Sunburst plot: relation between labels, geo-records, and recency',
+                                           className='fig-description',
+                                           ),
+                                ],
+                                className="card",
+                            ),
+                        ],
+                        className="wrapper",
+                    ),
+
+                    # wrapper of box card
+                    html.Div(
+                        children=[
+                            html.Div(
+                                children=[
+
+                                    # box plot
+                                    dcc.Graph(
+                                        id="box", config={"displayModeBar": True},
+                                    ),
+
+                                    html.P(children='Box plot, sorted: where lurk the ancients? '
+                                                    '(Genus filter not yet supported!)',
+                                           className='fig-description',
+                                           ),
+                                ],
+                                className="card",
+                            ),
+                        ],
+                        className="wrapper",
+                    ),
+
+                    # bottom band
                     html.Div(
                         children=[
                             html.H1(children=''),
@@ -185,6 +239,83 @@ app.layout = html.Div(
 
                 # tab 2: history by garden
                 dcc.Tab(label='History by Garden', children=[
+                    # preamble for 'history by garden' tab
+                    html.Div(
+                        children=[
+                            html.P(
+                                children='''Choose a set of gardens to see a summary of its changes over time.
+                                        ''',
+                                className="header-description",
+                            ),
+                        ],
+                        className="tab-header",
+                    ),
+
+                    # menu
+                    html.Div(
+                        children=[
+
+                            # garden selector
+                            html.Div(
+                                children=[
+                                    html.Div(children="Select Gardens", className="menu-title"),
+                                    dcc.Dropdown(
+                                        # id=s_gardens,
+                                        options=[
+                                            {"label": garden, "value": garden}
+                                            for garden in GARDENS
+                                        ],
+                                        value=('Alpine Garden', 'Winter Garden'),
+                                        clearable=True,
+                                        searchable=True,
+                                        multi=True,
+                                        className="dropdown",
+                                    ),
+                                ],
+                            ),
+                        ],
+                        className="menu",
+                    ),
+
+                    # wrapper of linechart card
+                    html.Div(
+                        children=[
+                            html.Div(
+                                children=[
+
+                                    dcc.Graph(
+                                        figure=pc_line(),
+                                    ),
+
+                                    html.P(children='Percent items labelled and geo-recorded over time',
+                                           className='fig-description',
+                                           ),
+                                ],
+                                className="card",
+                            ),
+                        ],
+                        className="wrapper",
+                    ),
+
+                    # wrapper of linechart card
+                    html.Div(
+                        children=[
+                            html.Div(
+                                children=[
+
+                                    dcc.Graph(
+                                        figure=pc_line(),
+                                    ),
+
+                                    html.P(children='Item and species counts over time',
+                                           className='fig-description',
+                                           ),
+                                ],
+                                className="card",
+                            ),
+                        ],
+                        className="wrapper",
+                    ),
                 ]),
 
                 # tab 3: history by genus
@@ -199,7 +330,9 @@ app.layout = html.Div(
 @app.callback(
     [
         Output("chloropleth", "figure"),
-        Output("bar", "figure")
+        Output("bar", "figure"),
+        Output("sunburst", "figure"),
+        Output("box", "figure")
     ],
     [
         Input(component_id=snapshot_genus, component_property='value'),
@@ -208,8 +341,15 @@ app.layout = html.Div(
     ],
 )
 def plots(genus_index, attribute, gardens):
-    filtered_df = filter_bed(CACHE[genus_index], gardens)
-    return [chloropleth(attribute, filtered_df), bar(attribute, filtered_df)]
+    gardens = set(gardens)
+    filtered_df = filter_bed(CACHE[genus_index], gardens)  # convert list to set
+    df_for_box = filter_bed(csv_pddf, gardens)
+
+    return [chloropleth(attribute, filtered_df),
+            bar(attribute, filtered_df),
+            sunburst(attribute, filtered_df),
+            box(attribute, df_for_box),
+            ]
     # this callback expects list.
 
 
