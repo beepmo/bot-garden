@@ -126,7 +126,7 @@ app.layout = html.Div(
                                 children=[
                                     html.Div(children="Attribute", className="menu-title"),
                                     dcc.Dropdown(
-                                        id=s_attribute,
+                                        id=snapshot_attribute,
                                         options=[
                                             {"label": attribute, "value": attribute}
                                             for attribute in ATTRIBUTES
