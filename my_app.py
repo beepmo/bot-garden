@@ -63,8 +63,8 @@ app.layout = html.Div(
         html.Div([
             dcc.Tabs([
 
-                # tab 1: present
-                dcc.Tab(label='Snapshot', children=[
+                # tab 1: chloropleth + bar
+                dcc.Tab(label='Spotlight', children=[
 
                     # preamble for 'present' tab
                     html.Div(
@@ -237,8 +237,8 @@ app.layout = html.Div(
                     ),
                 ]),
 
-                # tab 2: history by garden
-                dcc.Tab(label='History by Garden', children=[
+                # tab 2: sunburst
+                dcc.Tab(label='Interrelation', children=[
                     # preamble for 'history by garden' tab
                     html.Div(
                         children=[
@@ -318,8 +318,8 @@ app.layout = html.Div(
                     ),
                 ]),
 
-                # tab 3: history by genus
-                dcc.Tab(label='History by Genus', children=[
+                # tab 3: candle
+                dcc.Tab(label='Recency', children=[
                 ])
             ])
         ]),
