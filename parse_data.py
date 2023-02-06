@@ -51,7 +51,7 @@ CACHE = []
 # create one row of attributes for each bed
 
 
-def make_df(genus):  # genus is string
+def make_df(genus):  # alltab_genus is string
 
     # -------------------------------------------------------
     # lists to build into df series
@@ -181,7 +181,7 @@ def make_df(genus):  # genus is string
         g_total_percent[j] = int(g_total_percent[j] / items_in_bed[j] * 100)
 
         # -------------------------------------------------------
-        # get species and genus count from species list
+        # get species and alltab_genus count from species list
         bed_group = species_in_bed[j]
 
         # count species incl. subspecies
