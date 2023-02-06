@@ -47,18 +47,76 @@ snapshot_attribute = 'snapshot attribute'
 # _______________________________________________________________
 # laying it out
 
+
+
 app.layout = html.Div(
     children=[
 
         # top section containing preamble & UBC logo
         html.Div(
             children=[
-                # html.P(children="🥑", className="header-emoji"),
                 html.Img(src=logo_image, className="header-logo",
                          style={'textAlign': 'center'}),
             ],
             className="header",
         ),
+
+        # menu
+        html.Div(
+            children=[
+
+                # genus selector
+                html.Div(
+                    children=[
+                        html.Div(children="Genus", className="menu-title"),
+                        dcc.Dropdown(
+                            id=snapshot_genus,
+                            options=[
+                                {"label": GENUS[i], "value": i}
+                                for i in range(0, len(GENUS))
+                            ],
+                            value=0,
+                            searchable=True,
+                            className="dropdown",
+                        ),
+                    ],
+                ),
+
+                # garden selector
+                html.Div(
+                    children=[
+                        html.Div(children="Select Gardens", className="menu-title"),
+                        dcc.Dropdown(
+                            id=snapshot_gardens,
+                            options=[
+                                {"label": garden, "value": garden}
+                                for garden in GARDENS
+                            ],
+                            value=('Alpine Garden', 'Winter Garden'),
+                            clearable=True,
+                            searchable=True,
+                            multi=True,
+                            className="dropdown",
+                        ),
+                    ],
+                ),
+
+            ],
+            className="menu",
+        ),
+
+        # preamble for tabs
+        html.Div(
+            children=[
+                html.P(
+                    children='''
+                            ''',
+                    className="header-description",
+                ),
+            ],
+            className="tab-header",
+        ),
+
 
         html.Div([
             dcc.Tabs([
@@ -66,20 +124,7 @@ app.layout = html.Div(
                 # tab 1: chloropleth + bar
                 dcc.Tab(label='Spotlight', children=[
 
-                    # preamble for 'present' tab
-                    html.Div(
-                        children=[
-                            # html.P(children="🥑", className="header-emoji"),
 
-                            html.P(
-                                children='''Filter by gardens and genus!
-                                Specify an attribute to display on the map and bar plots.
-                                        ''',
-                                className="header-description",
-                            ),
-                        ],
-                        className="tab-header",
-                    ),
 
                     # menu
                     html.Div(
