@@ -40,13 +40,12 @@ from parse_data import ATTRIBUTES, GENUS, CACHE
 from filter_data import GARDENS
 
 # callback id
-snapshot_genus = 'snapshot genus'
-snapshot_gardens = 'snapshot set of gardens'
-snapshot_attribute = 'snapshot attribute'
+alltab_genus = 'genus callback'
+alltab_gardens = 'gardens callback'
+tab1_attribute = 'spotlight attribute callback'
 
 # _______________________________________________________________
 # laying it out
-
 
 
 app.layout = html.Div(
@@ -65,12 +64,12 @@ app.layout = html.Div(
         html.Div(
             children=[
 
-                # genus selector
+                # alltab_genus selector
                 html.Div(
                     children=[
                         html.Div(children="Genus", className="menu-title"),
                         dcc.Dropdown(
-                            id=snapshot_genus,
+                            id=alltab_genus,
                             options=[
                                 {"label": GENUS[i], "value": i}
                                 for i in range(0, len(GENUS))
@@ -87,7 +86,7 @@ app.layout = html.Div(
                     children=[
                         html.Div(children="Select Gardens", className="menu-title"),
                         dcc.Dropdown(
-                            id=snapshot_gardens,
+                            id=alltab_gardens,
                             options=[
                                 {"label": garden, "value": garden}
                                 for garden in GARDENS
@@ -124,54 +123,16 @@ app.layout = html.Div(
                 # tab 1: chloropleth + bar
                 dcc.Tab(label='Spotlight', children=[
 
-
-
                     # menu
                     html.Div(
                         children=[
-
-                            # genus selector
-                            html.Div(
-                                children=[
-                                    html.Div(children="Genus", className="menu-title"),
-                                    dcc.Dropdown(
-                                        id=snapshot_genus,
-                                        options=[
-                                            {"label": GENUS[i], "value": i}
-                                            for i in range(0, len(GENUS))
-                                        ],
-                                        value=0,
-                                        searchable=True,
-                                        className="dropdown",
-                                    ),
-                                ],
-                            ),
-
-                            # garden selector
-                            html.Div(
-                                children=[
-                                    html.Div(children="Select Gardens", className="menu-title"),
-                                    dcc.Dropdown(
-                                        id=snapshot_gardens,
-                                        options=[
-                                            {"label": garden, "value": garden}
-                                            for garden in GARDENS
-                                        ],
-                                        value=('Alpine Garden', 'Winter Garden'),
-                                        clearable=True,
-                                        searchable=True,
-                                        multi=True,
-                                        className="dropdown",
-                                    ),
-                                ],
-                            ),
 
                             # attribute selector
                             html.Div(
                                 children=[
                                     html.Div(children="Attribute", className="menu-title"),
                                     dcc.Dropdown(
-                                        id=snapshot_attribute,
+                                        id=tab1_attribute,
                                         options=[
                                             {"label": attribute, "value": attribute}
                                             for attribute in ATTRIBUTES
@@ -380,9 +341,9 @@ app.layout = html.Div(
         Output("box", "figure")
     ],
     [
-        Input(component_id=snapshot_genus, component_property='value'),
-        Input(component_id=snapshot_attribute, component_property="value"),
-        Input(component_id=snapshot_gardens, component_property="value"),
+        Input(component_id=alltab_genus, component_property='value'),
+        Input(component_id=tab1_attribute, component_property="value"),
+        Input(component_id=alltab_gardens, component_property="value"),
     ],
 )
 def plots(genus_index, attribute, gardens):
