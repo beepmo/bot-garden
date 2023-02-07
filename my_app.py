@@ -108,7 +108,7 @@ app.layout = html.Div(
         html.Div(
             children=[
                 html.P(
-                    children='''Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    children='''UBC Botanical Garden Collections Data Dashboard
                             ''',
                     className="header-description",
                 ),
