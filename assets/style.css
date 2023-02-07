@@ -5,20 +5,20 @@ body {
 }
 
 .header {
-    background-color: #011333;
+    background-color: #5f7494;
     display: flex;
     flex-direction: column;
     justify-content: left;
     padding: 24px;
+    height: 140px;
 }
 
 .tab-header {
-    background-color: #2e4162;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 70px;
-    padding-bottom: 120px;
+    margin-top: -90px;
+    height: 200px;
 }
 
 .header-emoji {
@@ -28,7 +28,7 @@ body {
 }
 
 .header-logo {
-    max-width: 600px;
+    max-width: 400px;
     height: auto;
 }
 
@@ -75,12 +75,23 @@ body {
     justify-content: center;
 }
 
-.menu {
-    width: 967px;
+.main_menu {
+    width: 650px;
     display: flex;
     justify-content: space-evenly;
     padding-top: 24px;
     margin: -80px auto auto auto;
+    padding-bottom: 24px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
+}
+
+.tab1_menu {
+    width: 350px;
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 24px;
+    margin: auto auto auto auto;
     padding-bottom: 24px;
     background-color: #5f7494;
     box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
@@ -102,5 +113,9 @@ body {
 .menu-title {
     margin-bottom: 6px;
     font-size: 18px;
-    color: #ffffff;
+    color: #737373;
+}
+
+.custom-tabs-container {
+    width: 80%;
 }
