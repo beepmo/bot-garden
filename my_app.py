@@ -34,7 +34,7 @@ logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
 from request_csv import csv_pddf
 
 # selection options & THE DATA
-from parse_data import ATTRIBUTES, GENUS, CACHE
+from parse_data import ATTRIBUTES, GENUS, CONCISE_CACHE
 
 # plotted regions in geojson
 from filter_data import GARDENS
@@ -237,7 +237,7 @@ app.layout = html.Div(
 )
 def plots(genus_index, attribute, gardens):
     gardens = set(gardens)
-    filtered_df = filter_bed(CACHE[genus_index], gardens)  # convert list to set
+    filtered_df = filter_bed(CONCISE_CACHE[genus_index], gardens)  # convert list to set
     df_for_box = filter_bed(csv_pddf, gardens)
 
     return [chloropleth(attribute, filtered_df),

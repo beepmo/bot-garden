@@ -1,4 +1,6 @@
 import time as tim
+
+import numpy as np
 import pandas as pd
 
 from request_csv import csv_pddf
@@ -44,14 +46,14 @@ ITEMS = 'Item Count'
 
 # -------------------------------------------------------
 # store for today, before new csv drops tomorrow
-CACHE = []
+CONCISE_CACHE = []  # list containing genus df with each bed appearing in one row
+RAW_CACHE = []  # list containing genus df with each item appearing in one row
 
 
 # -------------------------------------------------------
-# create one row of attributes for each bed
+# create one row of attributes of members of genus for each bed
 
-
-def make_df(genus):  # alltab_genus is string
+def concise_df(genus):  # alltab_genus is string
 
     # -------------------------------------------------------
     # lists to build into df series
@@ -215,6 +217,21 @@ def make_df(genus):  # alltab_genus is string
 
     return df
 
+# -------------------------------------------------------
+# filter source to genus
+
+
+def raw_df(genus):
+
+    lst = []
+    for i in csv_pddf['Taxon']:
+        if i.split()[0] == genus:
+            lst.append(True)
+        else:
+            lst.append(False)
+
+    return csv_pddf.loc[lst]
+
 
 # -------------------------------------------------------
 # helper to reduce code duplication
@@ -257,12 +274,11 @@ def process_item(yes_action, no_action, labelled, georecorded, age, l_total, g_t
 
 
 # -------------------------------------------------------
-# make sure make_df loop is run only once. same with mock
+# make sure concise_df loop is run only once. same with mock
 # I see that it gets run twice anyways: before building flask app and after
 
-if len(CACHE) == 0:
+if len(CONCISE_CACHE) == 0:
     for genus in GENUS:
-        CACHE.append(make_df(genus))
+        CONCISE_CACHE.append(concise_df(genus))
+        RAW_CACHE.append(raw_df(genus))
 
-# df = CACHE[0]
-# sunburst = df[[L_ONLY,G_ONLY,L_AND_G,LGPF,NOT_L_NOR_G]]
