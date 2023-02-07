@@ -138,10 +138,6 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="chloropleth", config={"displayModeBar": True},
                                     ),
-
-                                    html.P(children='Choropleth map: geospatial view of attribute',
-                                           className='fig-description',
-                                           ),
                                 ],
                                 className="card",
                             ),
@@ -159,10 +155,6 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="bar", config={"displayModeBar": True},
                                     ),
-
-                                    html.P(children='Bar chart: sorting by attribute value',
-                                           className='fig-description',
-                                           ),
                                 ],
                                 className="card",
                             ),
@@ -179,11 +171,6 @@ app.layout = html.Div(
                                     # sunburst plot
                                     dcc.Graph(
                                         id="sunburst", config={"displayModeBar": False},
-                                    ),
-
-                                    html.P(
-                                        children='Sunburst plot: relation between labels, geo-records, and recency',
-                                        className='fig-description',
                                     ),
                                 ],
                                 className="card",
@@ -202,11 +189,6 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="box", config={"displayModeBar": True},
                                     ),
-
-                                    html.P(children='Box plot, sorted: where lurk the ancients? '
-                                                    '(Genus filter not yet supported!)',
-                                           className='fig-description',
-                                           ),
                                 ],
                                 className="card",
                             ),
@@ -227,17 +209,6 @@ app.layout = html.Div(
 
                 # tab 2: sunburst
                 dcc.Tab(label='Interrelation', children=[
-                    # preamble for 'history by garden' tab
-                    html.Div(
-                        children=[
-                            html.P(
-                                children='''Choose a set of gardens to see a summary of its changes over time.
-                                ''',
-                                className="header-description",
-                            ),
-                        ],
-                        className="tab-header",
-                    ),
 
                     # menu
                     html.Div(
@@ -263,46 +234,6 @@ app.layout = html.Div(
                             ),
                         ],
                         className="menu",
-                    ),
-
-                    # wrapper of linechart card
-                    html.Div(
-                        children=[
-                            html.Div(
-                                children=[
-
-                                    dcc.Graph(
-                                        figure=pc_line(),
-                                    ),
-
-                                    html.P(children='Percent items labelled and geo-recorded over time',
-                                           className='fig-description',
-                                           ),
-                                ],
-                                className="card",
-                            ),
-                        ],
-                        className="wrapper",
-                    ),
-
-                    # wrapper of linechart card
-                    html.Div(
-                        children=[
-                            html.Div(
-                                children=[
-
-                                    dcc.Graph(
-                                        figure=pc_line(),
-                                    ),
-
-                                    html.P(children='Item and species counts over time',
-                                           className='fig-description',
-                                           ),
-                                ],
-                                className="card",
-                            ),
-                        ],
-                        className="wrapper",
                     ),
                 ]),
 
