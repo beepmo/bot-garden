@@ -47,16 +47,6 @@ body {
     font-size: 18px;
 }
 
-
-.fig-description {
-    color: #343434;
-    text-align: center;
-
-    margin: 12px auto;
-    max-width: 900px;
-    font-size: 18px;
-}
-
 .wrapper {
     margin-right: auto;
     margin-left: auto;

@@ -162,6 +162,11 @@ app.layout = html.Div(
                         className="wrapper",
                     ),
 
+
+                ]),
+
+                # tab 2: sunburst
+                dcc.Tab(label='Interrelation', children=[
                     # wrapper of sunburst card
                     html.Div(
                         children=[
@@ -178,6 +183,10 @@ app.layout = html.Div(
                         ],
                         className="wrapper",
                     ),
+                ]),
+
+                # tab 3: candle
+                dcc.Tab(label='Recency', children=[
 
                     # wrapper of box card
                     html.Div(
@@ -196,26 +205,19 @@ app.layout = html.Div(
                         className="wrapper",
                     ),
 
-                    # bottom band
-                    html.Div(
-                        children=[
-                            html.H1(children=''),
-                            html.P(children="🥑", className="header-emoji"),
-                            html.H1(children=''),
-                        ],
-                        className="header",
-                    ),
-                ]),
-
-                # tab 2: sunburst
-                dcc.Tab(label='Interrelation', children=[
-                ]),
-
-                # tab 3: candle
-                dcc.Tab(label='Recency', children=[
                 ])
             ]),
         ]),
+
+        # bottom band
+        html.Div(
+            children=[
+                html.H1(children=''),
+                html.P(children="🥑", className="header-emoji"),
+                html.H1(children=''),
+            ],
+            className="header",
+        ),
     ], className="tab-wrapper",
 )
 
