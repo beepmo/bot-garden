@@ -121,29 +121,9 @@ app.layout = html.Div(
                 # tab 1: chloropleth + bar
                 dcc.Tab(label='Spotlight', children=[
 
-                    # menu
-                    html.Div(
-                        children=[
-
-                            # attribute selector
-                            html.Div(
-                                children=[
-                                    html.Div(children="Attribute", className="menu-title"),
-                                    dcc.Dropdown(
-                                        id=tab1_attribute,
-                                        options=[
-                                            {"label": attribute, "value": attribute}
-                                            for attribute in ATTRIBUTES
-                                        ],
-                                        value="Item Count",
-                                        className="dropdown",
-                                    ),
-                                ],
-                            ),
-
-                        ],
-                        className="tab1_menu",
-                    ),
+                    html.Div([
+                        dcc.RadioItems(ATTRIBUTES, 'Item Count', id=tab1_attribute, inline=False),
+                    ]),
 
                     # wrapper of chloropleth card
                     html.Div(
@@ -327,7 +307,7 @@ app.layout = html.Div(
                 dcc.Tab(label='Recency', children=[
                 ])
             ]),
-        ]),
+        ],className="tab-wrapper"),
     ]
 )
 
