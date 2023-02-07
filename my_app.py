@@ -94,7 +94,7 @@ app.layout = html.Div(
                                 {"label": garden, "value": garden}
                                 for garden in GARDENS
                             ],
-                            value=('Alpine Garden', 'Winter Garden'),
+                            value=(GARDENS[0]), # 'All gardens'
                             clearable=True,
                             searchable=True,
                             multi=True,
@@ -125,8 +125,8 @@ app.layout = html.Div(
                 dcc.Tab(label='Spotlight', children=[
 
                     html.Div([
-                        dcc.RadioItems(ATTRIBUTES, 'Item Count', id=tab1_attribute, inline=False),
-                    ]),
+                        dcc.RadioItems(ATTRIBUTES, 'Item Count', id=tab1_attribute, inline=False, inputStyle={"margin-left": "30px", "margin-right": "30px"}),
+                    ], className="radio"),
 
                     # wrapper of chloropleth card
                     html.Div(
@@ -209,32 +209,6 @@ app.layout = html.Div(
 
                 # tab 2: sunburst
                 dcc.Tab(label='Interrelation', children=[
-
-                    # menu
-                    html.Div(
-                        children=[
-
-                            # garden selector
-                            html.Div(
-                                children=[
-                                    html.Div(children="Select Gardens", className="menu-title"),
-                                    dcc.Dropdown(
-                                        # id=s_gardens,
-                                        options=[
-                                            {"label": garden, "value": garden}
-                                            for garden in GARDENS
-                                        ],
-                                        value=('Alpine Garden', 'Winter Garden'),
-                                        clearable=True,
-                                        searchable=True,
-                                        multi=True,
-                                        className="dropdown",
-                                    ),
-                                ],
-                            ),
-                        ],
-                        className="menu",
-                    ),
                 ]),
 
                 # tab 3: candle

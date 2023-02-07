@@ -2,6 +2,7 @@ body {
     font-family: "Lato", sans-serif;
     margin-top: 0;
     background-color: #F7F7F7;
+    color: #737373;
 }
 
 .header {
@@ -118,4 +119,13 @@ body {
 
 .space {
     padding: 20px;
+}
+
+.radio {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
+    justify-content: center;
+    padding: 20px;
+    background: #ffffff;
 }
