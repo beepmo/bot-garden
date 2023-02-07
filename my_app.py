@@ -51,6 +51,9 @@ tab1_attribute = 'spotlight attribute callback'
 app.layout = html.Div(
     children=[
 
+        # space
+        html.P(children='', className="space"),
+
         # top section containing preamble & UBC logo
         html.Div(
             children=[
@@ -108,7 +111,7 @@ app.layout = html.Div(
         html.Div(
             children=[
                 html.P(
-                    children='''
+                    children='''Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             ''',
                     className="header-description",
                 ),
@@ -307,8 +310,8 @@ app.layout = html.Div(
                 dcc.Tab(label='Recency', children=[
                 ])
             ]),
-        ],className="tab-wrapper"),
-    ]
+        ]),
+    ], className="tab-wrapper",
 )
 
 
