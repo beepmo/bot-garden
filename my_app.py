@@ -171,8 +171,8 @@ app.layout = html.Div(
                             html.Div(children="Hierarchy", className="menu-title"),
                             dcc.Dropdown(
                                 id=tab2_hierarchy,
-                                options=RAW_ATTRIBUTES,
-                                value=RAW_ATTRIBUTES,
+                                options=['Bed', 'Label', 'Geo?', 'Taxon'],
+                                value=['Label', 'Geo?'],
                                 searchable=True,
                                 clearable=True,
                                 multi=True,
@@ -191,7 +191,7 @@ app.layout = html.Div(
 
                                     # sunburst plot
                                     dcc.Graph(
-                                        id="sunburst", config={"displayModeBar": False},
+                                        id="sunburst", config={"displayModeBar": True},
                                     ),
                                 ],
                                 className="card",
@@ -242,22 +242,27 @@ app.layout = html.Div(
     [
         Output("chloropleth", "figure"),
         Output("bar", "figure"),
-        Output("box", "figure")
+        Output("box", "figure"),
+        Output("sunburst", "figure"),
     ],
     [
         Input(component_id=alltab_genus, component_property='value'),
         Input(component_id=tab1_attribute, component_property="value"),
         Input(component_id=alltab_gardens, component_property="value"),
+        Input(component_id=tab2_hierarchy, component_property="value"),
     ],
 )
-def plots(genus_index, attribute, gardens):
+def plots(genus_index, attribute, gardens, hierarchy):
     gardens = set(gardens)
     filtered_concise = filter_bed(CONCISE_CACHE[genus_index], gardens)  # convert list to set
     filtered_raw = filter_bed(RAW_CACHE[genus_index], gardens)
 
+    print(hierarchy)
+
     return [chloropleth(attribute, filtered_concise),
             bar(attribute, filtered_concise),
             box(attribute, filtered_raw),
+            sunburst(hierarchy, filtered_raw)
             ]
     # this callback expects list.
 
