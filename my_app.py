@@ -176,7 +176,7 @@ app.layout = html.Div(
                                 searchable=True,
                                 clearable=True,
                                 multi=True,
-                                className="dropdown", style={
+                                style={
                                     'width': '100%'
                                 }
                             ),
