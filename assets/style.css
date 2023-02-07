@@ -76,7 +76,7 @@ body {
 }
 
 .main_menu {
-    width: 650px;
+    width: 80%;
     display: flex;
     justify-content: space-evenly;
     padding-top: 24px;
@@ -118,4 +118,9 @@ body {
 
 .custom-tabs-container {
     width: 80%;
+}
+
+.tab-wrapper {
+    width: 80%;
+    margin: auto auto auto auto;
 }
