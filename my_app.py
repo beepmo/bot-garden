@@ -42,7 +42,7 @@ from filter_data import GARDENS
 alltab_genus = 'genus callback'
 alltab_gardens = 'gardens callback'
 tab1_attribute = 'spotlight attribute callback'
-
+tab2_hierarchy = 'hierarchy for sunburst path'
 # _______________________________________________________________
 # laying it out
 
@@ -93,7 +93,7 @@ app.layout = html.Div(
                                 {"label": garden, "value": garden}
                                 for garden in GARDENS
                             ],
-                            value=(GARDENS[0]), # 'All gardens'
+                            value=(GARDENS[0]),  # 'All gardens'
                             clearable=True,
                             searchable=True,
                             multi=True,
@@ -124,7 +124,8 @@ app.layout = html.Div(
                 dcc.Tab(label='Spotlight', children=[
 
                     html.Div([
-                        dcc.RadioItems(CONCISE_ATTRIBUTES, 'Item Count', id=tab1_attribute, inline=False, inputStyle={"margin-left": "30px", "margin-right": "30px"}),
+                        dcc.RadioItems(CONCISE_ATTRIBUTES, 'Item Count', id=tab1_attribute, inline=False,
+                                       inputStyle={"margin-left": "30px", "margin-right": "30px"}),
                     ], className="radio"),
 
                     # wrapper of chloropleth card
@@ -161,11 +162,27 @@ app.layout = html.Div(
                         className="wrapper",
                     ),
 
-
                 ]),
 
                 # tab 2: sunburst
                 dcc.Tab(label='Interrelation', children=[
+
+                    # hierarchy selector
+                    html.Div(
+                        children=[
+                            html.Div(children="Hierarchy", className="menu-title"),
+                            dcc.Dropdown(
+                                id=tab2_hierarchy,
+                                options=RAW_ATTRIBUTES,
+                                value=RAW_ATTRIBUTES,
+                                searchable=True,
+                                clearable=True,
+                                multi=True,
+                                className="dropdown",
+                            ),
+                        ],
+                    ),
+
                     # wrapper of sunburst card
                     html.Div(
                         children=[
