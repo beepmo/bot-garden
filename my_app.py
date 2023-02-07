@@ -78,7 +78,6 @@ app.layout = html.Div(
                             ],
                             value=0,
                             searchable=True,
-                            className="dropdown",
                         ),
                     ],
                 ),
@@ -97,7 +96,6 @@ app.layout = html.Div(
                             clearable=True,
                             searchable=True,
                             multi=True,
-                            className="dropdown",
                         ),
                     ],
                 ),
@@ -178,9 +176,11 @@ app.layout = html.Div(
                                 searchable=True,
                                 clearable=True,
                                 multi=True,
-                                className="dropdown",
+                                className="dropdown", style={
+                                    'width': '100%'
+                                }
                             ),
-                        ],
+                        ], className='radio'
                     ),
 
                     # wrapper of sunburst card
