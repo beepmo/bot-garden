@@ -88,6 +88,7 @@ def concise_df(genus):  # alltab_genus is string
 
         species = row['Taxon']
 
+        # condition for skip: genus is non-empty string, taxon doesn't match
         if genus and (species.partition(' ')[0] != genus):
             continue
 
@@ -222,6 +223,9 @@ def concise_df(genus):  # alltab_genus is string
 
 
 def raw_df(genus):
+
+    if genus == GENUS[0]:
+        return csv_pddf
 
     lst = []
     for i in csv_pddf['Taxon']:
