@@ -119,7 +119,6 @@ def chloropleth(attribute, filtered_df):
 
     # make bigger
     fig.update_layout(
-        autosize=False,
         margin=dict(
             # l=0,
             # r=0,
