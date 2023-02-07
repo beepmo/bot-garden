@@ -45,6 +45,7 @@ def percent_handler(plotter):
             fig.update_coloraxes(colorbar_ticksuffix='%')
 
         return fig
+
     return wrapper
 
 
@@ -54,7 +55,6 @@ def beautify(plotter):
 
     @functools.wraps(plotter)
     def wrapper(attribute, df):
-
         fig = plotter(attribute, df)
 
         # ____________________________________________________________________________________
@@ -199,4 +199,15 @@ def pc_line():
                           'country': 'Attribute',
                           })
 
+    return fig
+
+
+def sunburst(hierarchy, filtered_raw):
+    fig = px.sunburst(filtered_raw,
+                      path=hierarchy,
+                      color='Days Since Sighted',
+                      color_continuous_scale='Teal',
+                      color_continuous_midpoint=1000
+                      )
+    fig.update_traces(hovertemplate="Days since sighted: %{value}")
     return fig

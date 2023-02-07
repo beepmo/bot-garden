@@ -1,7 +1,7 @@
 import re
 import time
 
-all = 'All GARDENS'
+all = 'All gardens'
 _4c = 'Carolinian Forest'
 _1c = 'Contemporary Garden'
 _1p = 'Winter Garden'

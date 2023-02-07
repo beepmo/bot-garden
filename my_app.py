@@ -30,116 +30,101 @@ logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
 # _______________________________________________________________
 # variables
 
-# for BOX
-from request_csv import csv_pddf
 
 # selection options & THE DATA
-from parse_data import ATTRIBUTES, GENUS, CACHE
+from parse_data import CONCISE_ATTRIBUTES, GENUS, CONCISE_CACHE, RAW_CACHE
+from request_csv import RAW_ATTRIBUTES
 
 # plotted regions in geojson
 from filter_data import GARDENS
 
 # callback id
-snapshot_genus = 'snapshot genus'
-snapshot_gardens = 'snapshot set of gardens'
-snapshot_attribute = 'snapshot attribute'
-
+alltab_genus = 'genus callback'
+alltab_gardens = 'gardens callback'
+tab1_attribute = 'spotlight attribute callback'
+tab2_hierarchy = 'hierarchy for sunburst path'
 # _______________________________________________________________
 # laying it out
+
 
 app.layout = html.Div(
     children=[
 
+        # space
+        html.P(children='', className="space"),
+
         # top section containing preamble & UBC logo
         html.Div(
             children=[
-                # html.P(children="🥑", className="header-emoji"),
                 html.Img(src=logo_image, className="header-logo",
-                         style={'textAlign': 'center'}),
+                         ),
             ],
             className="header",
         ),
 
+        # menu
+        html.Div(
+            children=[
+
+                # alltab_genus selector
+                html.Div(
+                    children=[
+                        html.Div(children="Genus", className="menu-title"),
+                        dcc.Dropdown(
+                            id=alltab_genus,
+                            options=[
+                                {"label": GENUS[i], "value": i}
+                                for i in range(0, len(GENUS))
+                            ],
+                            value=0,
+                            searchable=True,
+                        ),
+                    ],
+                ),
+
+                # garden selector
+                html.Div(
+                    children=[
+                        html.Div(children="Gardens", className="menu-title"),
+                        dcc.Dropdown(
+                            id=alltab_gardens,
+                            options=[
+                                {"label": garden, "value": garden}
+                                for garden in GARDENS
+                            ],
+                            value=(GARDENS[0]),  # 'All gardens'
+                            clearable=True,
+                            searchable=True,
+                            multi=True,
+                        ),
+                    ],
+                ),
+
+            ],
+            className="main_menu",
+        ),
+
+        # preamble for tabs
+        html.Div(
+            children=[
+                html.P(
+                    children='''Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            ''',
+                    className="header-description",
+                ),
+            ],
+            className="tab-header",
+        ),
+
         html.Div([
-            dcc.Tabs([
+            dcc.Tabs(children=[
+                # tab 1: chloropleth + bar
+                dcc.Tab(label='Spotlight', children=[
 
-                # tab 1: present
-                dcc.Tab(label='Snapshot', children=[
-
-                    # preamble for 'present' tab
-                    html.Div(
-                        children=[
-                            # html.P(children="🥑", className="header-emoji"),
-
-                            html.P(
-                                children='''Filter by gardens and genus!
-                                Specify an attribute to display on the map and bar plots.
-                                        ''',
-                                className="header-description",
-                            ),
-                        ],
-                        className="tab-header",
-                    ),
-
-                    # menu
-                    html.Div(
-                        children=[
-
-                            # genus selector
-                            html.Div(
-                                children=[
-                                    html.Div(children="Genus", className="menu-title"),
-                                    dcc.Dropdown(
-                                        id=snapshot_genus,
-                                        options=[
-                                            {"label": GENUS[i], "value": i}
-                                            for i in range(0, len(GENUS))
-                                        ],
-                                        value=0,
-                                        searchable=True,
-                                        className="dropdown",
-                                    ),
-                                ],
-                            ),
-
-                            # garden selector
-                            html.Div(
-                                children=[
-                                    html.Div(children="Select Gardens", className="menu-title"),
-                                    dcc.Dropdown(
-                                        id=snapshot_gardens,
-                                        options=[
-                                            {"label": garden, "value": garden}
-                                            for garden in GARDENS
-                                        ],
-                                        value=('Alpine Garden', 'Winter Garden'),
-                                        clearable=True,
-                                        searchable=True,
-                                        multi=True,
-                                        className="dropdown",
-                                    ),
-                                ],
-                            ),
-
-                            # attribute selector
-                            html.Div(
-                                children=[
-                                    html.Div(children="Attribute", className="menu-title"),
-                                    dcc.Dropdown(
-                                        id=snapshot_attribute,
-                                        options=[
-                                            {"label": attribute, "value": attribute}
-                                            for attribute in ATTRIBUTES
-                                        ],
-                                        value="Item Count",
-                                        className="dropdown",
-                                    ),
-                                ],
-                            ),
-
-                        ],
-                        className="menu",
-                    ),
+                    html.Div([
+                        dcc.RadioItems(CONCISE_ATTRIBUTES, 'Item Count', id=tab1_attribute, inline=False,
+                                       inputStyle={"margin-left": "30px", "margin-right": "30px"}),
+                    ], className="radio"),
 
                     # wrapper of chloropleth card
                     html.Div(
@@ -151,10 +136,6 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="chloropleth", config={"displayModeBar": True},
                                     ),
-
-                                    html.P(children='Choropleth map: geospatial view of attribute',
-                                           className='fig-description',
-                                           ),
                                 ],
                                 className="card",
                             ),
@@ -172,15 +153,34 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="bar", config={"displayModeBar": True},
                                     ),
-
-                                    html.P(children='Bar chart: sorting by attribute value',
-                                           className='fig-description',
-                                           ),
                                 ],
                                 className="card",
                             ),
                         ],
                         className="wrapper",
+                    ),
+
+                ]),
+
+                # tab 2: sunburst
+                dcc.Tab(label='Interrelation', children=[
+
+                    # hierarchy selector
+                    html.Div(
+                        children=[
+                            html.Div(children="Hierarchy", className="menu-title"),
+                            dcc.Dropdown(
+                                id=tab2_hierarchy,
+                                options=['Bed', 'Label', 'Geo?', 'Taxon'],
+                                value=['Label', 'Geo?'],
+                                searchable=True,
+                                clearable=True,
+                                multi=True,
+                                style={
+                                    'width': '100%'
+                                }
+                            ),
+                        ], className='radio'
                     ),
 
                     # wrapper of sunburst card
@@ -191,18 +191,18 @@ app.layout = html.Div(
 
                                     # sunburst plot
                                     dcc.Graph(
-                                        id="sunburst", config={"displayModeBar": False},
+                                        id="sunburst", config={"displayModeBar": True},
                                     ),
-
-                                    html.P(children='Sunburst plot: relation between labels, geo-records, and recency',
-                                           className='fig-description',
-                                           ),
                                 ],
                                 className="card",
                             ),
                         ],
                         className="wrapper",
                     ),
+                ]),
+
+                # tab 3: candle
+                dcc.Tab(label='Recency', children=[
 
                     # wrapper of box card
                     html.Div(
@@ -214,11 +214,6 @@ app.layout = html.Div(
                                     dcc.Graph(
                                         id="box", config={"displayModeBar": True},
                                     ),
-
-                                    html.P(children='Box plot, sorted: where lurk the ancients? '
-                                                    '(Genus filter not yet supported!)',
-                                           className='fig-description',
-                                           ),
                                 ],
                                 className="card",
                             ),
@@ -226,104 +221,20 @@ app.layout = html.Div(
                         className="wrapper",
                     ),
 
-                    # bottom band
-                    html.Div(
-                        children=[
-                            html.H1(children=''),
-                            html.P(children="🥑", className="header-emoji"),
-                            html.H1(children=''),
-                        ],
-                        className="header",
-                    ),
-                ]),
-
-                # tab 2: history by garden
-                dcc.Tab(label='History by Garden', children=[
-                    # preamble for 'history by garden' tab
-                    html.Div(
-                        children=[
-                            html.P(
-                                children='''Choose a set of gardens to see a summary of its changes over time.
-                                        ''',
-                                className="header-description",
-                            ),
-                        ],
-                        className="tab-header",
-                    ),
-
-                    # menu
-                    html.Div(
-                        children=[
-
-                            # garden selector
-                            html.Div(
-                                children=[
-                                    html.Div(children="Select Gardens", className="menu-title"),
-                                    dcc.Dropdown(
-                                        # id=s_gardens,
-                                        options=[
-                                            {"label": garden, "value": garden}
-                                            for garden in GARDENS
-                                        ],
-                                        value=('Alpine Garden', 'Winter Garden'),
-                                        clearable=True,
-                                        searchable=True,
-                                        multi=True,
-                                        className="dropdown",
-                                    ),
-                                ],
-                            ),
-                        ],
-                        className="menu",
-                    ),
-
-                    # wrapper of linechart card
-                    html.Div(
-                        children=[
-                            html.Div(
-                                children=[
-
-                                    dcc.Graph(
-                                        figure=pc_line(),
-                                    ),
-
-                                    html.P(children='Percent items labelled and geo-recorded over time',
-                                           className='fig-description',
-                                           ),
-                                ],
-                                className="card",
-                            ),
-                        ],
-                        className="wrapper",
-                    ),
-
-                    # wrapper of linechart card
-                    html.Div(
-                        children=[
-                            html.Div(
-                                children=[
-
-                                    dcc.Graph(
-                                        figure=pc_line(),
-                                    ),
-
-                                    html.P(children='Item and species counts over time',
-                                           className='fig-description',
-                                           ),
-                                ],
-                                className="card",
-                            ),
-                        ],
-                        className="wrapper",
-                    ),
-                ]),
-
-                # tab 3: history by genus
-                dcc.Tab(label='History by Genus', children=[
                 ])
-            ])
+            ]),
         ]),
-    ]
+
+        # bottom band
+        html.Div(
+            children=[
+                html.H1(children=''),
+                html.P(children="🥑", className="header-emoji"),
+                html.H1(children=''),
+            ],
+            className="header",
+        ),
+    ], className="tab-wrapper",
 )
 
 
@@ -331,24 +242,27 @@ app.layout = html.Div(
     [
         Output("chloropleth", "figure"),
         Output("bar", "figure"),
+        Output("box", "figure"),
         Output("sunburst", "figure"),
-        Output("box", "figure")
     ],
     [
-        Input(component_id=snapshot_genus, component_property='value'),
-        Input(component_id=snapshot_attribute, component_property="value"),
-        Input(component_id=snapshot_gardens, component_property="value"),
+        Input(component_id=alltab_genus, component_property='value'),
+        Input(component_id=tab1_attribute, component_property="value"),
+        Input(component_id=alltab_gardens, component_property="value"),
+        Input(component_id=tab2_hierarchy, component_property="value"),
     ],
 )
-def plots(genus_index, attribute, gardens):
+def plots(genus_index, attribute, gardens, hierarchy):
     gardens = set(gardens)
-    filtered_df = filter_bed(CACHE[genus_index], gardens)  # convert list to set
-    df_for_box = filter_bed(csv_pddf, gardens)
+    filtered_concise = filter_bed(CONCISE_CACHE[genus_index], gardens)  # convert list to set
+    filtered_raw = filter_bed(RAW_CACHE[genus_index], gardens)
 
-    return [chloropleth(attribute, filtered_df),
-            bar(attribute, filtered_df),
-            sunburst(attribute, filtered_df),
-            box(attribute, df_for_box),
+    print(hierarchy)
+
+    return [chloropleth(attribute, filtered_concise),
+            bar(attribute, filtered_concise),
+            box(attribute, filtered_raw),
+            sunburst(hierarchy, filtered_raw)
             ]
     # this callback expects list.
 

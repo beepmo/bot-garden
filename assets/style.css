@@ -2,23 +2,22 @@ body {
     font-family: "Lato", sans-serif;
     margin-top: 0;
     background-color: #F7F7F7;
+    color: #737373;
 }
 
 .header {
-    background-color: #011333;
-    display: flex;
-    flex-direction: column;
+    background-color: #5f7494;
     justify-content: left;
     padding: 24px;
+    height: 140px;
 }
 
 .tab-header {
-    background-color: #2e4162;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 70px;
-    padding-bottom: 120px;
+    padding: inherit;
+    height: 100px;
 }
 
 .header-emoji {
@@ -28,7 +27,7 @@ body {
 }
 
 .header-logo {
-    max-width: 600px;
+    max-width: 400px;
     height: auto;
 }
 
@@ -41,19 +40,9 @@ body {
 }
 
 .header-description {
-    color: #f5f5f5;
+    color: #707070;
     text-align: center;
     margin: 0 auto;
-    max-width: 900px;
-    font-size: 18px;
-}
-
-
-.fig-description {
-    color: #343434;
-    text-align: center;
-
-    margin: 12px auto;
     max-width: 900px;
     font-size: 18px;
 }
@@ -61,9 +50,6 @@ body {
 .wrapper {
     margin-right: auto;
     margin-left: auto;
-    max-width: 1324px;
-    padding-right: 10px;
-    padding-left: 10px;
     margin-top: 32px;
     justify-content: center;
 }
@@ -75,12 +61,23 @@ body {
     justify-content: center;
 }
 
-.menu {
-    width: 967px;
+.main_menu {
+    width: 80%;
     display: flex;
     justify-content: space-evenly;
     padding-top: 24px;
     margin: -80px auto auto auto;
+    padding-bottom: 24px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
+}
+
+.tab1_menu {
+    width: 350px;
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 24px;
+    margin: auto auto auto auto;
     padding-bottom: 24px;
     background-color: #5f7494;
     box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
@@ -102,5 +99,23 @@ body {
 .menu-title {
     margin-bottom: 6px;
     font-size: 18px;
-    color: #ffffff;
+    color: #737373;
+}
+
+.tab-wrapper {
+    width: 80%;
+    margin: auto auto auto auto;
+}
+
+.space {
+    padding: 20px;
+}
+
+.radio {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.18);
+    justify-content: center;
+    padding: 20px;
+    background: #ffffff;
 }

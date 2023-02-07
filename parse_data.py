@@ -1,4 +1,6 @@
 import time as tim
+
+import numpy as np
 import pandas as pd
 
 from request_csv import csv_pddf
@@ -21,7 +23,7 @@ GENUS = ('',
          'Clematis',
          )
 
-ATTRIBUTES = ('Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats')
+CONCISE_ATTRIBUTES = ('Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats')
 
 # list of bed codes not on the map
 EXCLUDED_PREFIXES = ['H',  # herbariums
@@ -44,14 +46,14 @@ ITEMS = 'Item Count'
 
 # -------------------------------------------------------
 # store for today, before new csv drops tomorrow
-CACHE = []
+CONCISE_CACHE = []  # list containing genus df with each bed appearing in one row
+RAW_CACHE = []  # list containing genus df with each item appearing in one row
 
 
 # -------------------------------------------------------
-# create one row of attributes for each bed
+# create one row of attributes of members of genus for each bed
 
-
-def make_df(genus):  # genus is string
+def concise_df(genus):  # alltab_genus is string
 
     # -------------------------------------------------------
     # lists to build into df series
@@ -86,6 +88,7 @@ def make_df(genus):  # genus is string
 
         species = row['Taxon']
 
+        # condition for skip: genus is non-empty string, taxon doesn't match
         if genus and (species.partition(' ')[0] != genus):
             continue
 
@@ -181,7 +184,7 @@ def make_df(genus):  # genus is string
         g_total_percent[j] = int(g_total_percent[j] / items_in_bed[j] * 100)
 
         # -------------------------------------------------------
-        # get species and genus count from species list
+        # get species and alltab_genus count from species list
         bed_group = species_in_bed[j]
 
         # count species incl. subspecies
@@ -214,6 +217,24 @@ def make_df(genus):  # genus is string
           f'Memory used: \n{memory}.')'''
 
     return df
+
+# -------------------------------------------------------
+# filter source to genus
+
+
+def raw_df(genus):
+
+    if genus == GENUS[0]:
+        return csv_pddf
+
+    lst = []
+    for i in csv_pddf['Taxon']:
+        if i.split()[0] == genus:
+            lst.append(True)
+        else:
+            lst.append(False)
+
+    return csv_pddf.loc[lst]
 
 
 # -------------------------------------------------------
@@ -257,12 +278,11 @@ def process_item(yes_action, no_action, labelled, georecorded, age, l_total, g_t
 
 
 # -------------------------------------------------------
-# make sure make_df loop is run only once. same with mock
+# make sure concise_df loop is run only once. same with mock
 # I see that it gets run twice anyways: before building flask app and after
 
-if len(CACHE) == 0:
+if len(CONCISE_CACHE) == 0:
     for genus in GENUS:
-        CACHE.append(make_df(genus))
+        CONCISE_CACHE.append(concise_df(genus))
+        RAW_CACHE.append(raw_df(genus))
 
-# df = CACHE[0]
-# sunburst = df[[L_ONLY,G_ONLY,L_AND_G,LGPF,NOT_L_NOR_G]]

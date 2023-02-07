@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 import os
 
 # -------------------------------------------------------
+RAW_ATTRIBUTES = ['Bed', 'Label', 'Geo?', 'Days Since Sighted', 'Taxon']
+
+# -------------------------------------------------------
 # Secrets
 
 load_dotenv()
