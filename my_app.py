@@ -32,7 +32,8 @@ logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
 
 
 # selection options & THE DATA
-from parse_data import ATTRIBUTES, GENUS, CONCISE_CACHE, RAW_CACHE
+from parse_data import CONCISE_ATTRIBUTES, GENUS, CONCISE_CACHE, RAW_CACHE
+from request_csv import RAW_ATTRIBUTES
 
 # plotted regions in geojson
 from filter_data import GARDENS
@@ -123,7 +124,7 @@ app.layout = html.Div(
                 dcc.Tab(label='Spotlight', children=[
 
                     html.Div([
-                        dcc.RadioItems(ATTRIBUTES, 'Item Count', id=tab1_attribute, inline=False, inputStyle={"margin-left": "30px", "margin-right": "30px"}),
+                        dcc.RadioItems(CONCISE_ATTRIBUTES, 'Item Count', id=tab1_attribute, inline=False, inputStyle={"margin-left": "30px", "margin-right": "30px"}),
                     ], className="radio"),
 
                     # wrapper of chloropleth card

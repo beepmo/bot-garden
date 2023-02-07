@@ -23,7 +23,7 @@ GENUS = ('',
          'Clematis',
          )
 
-ATTRIBUTES = ('Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats')
+CONCISE_ATTRIBUTES = ('Species Count', 'Item Count', 'Label Stats', 'Geo-record Stats')
 
 # list of bed codes not on the map
 EXCLUDED_PREFIXES = ['H',  # herbariums
