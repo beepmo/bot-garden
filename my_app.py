@@ -55,7 +55,7 @@ app.layout = html.Div(
         html.Div(
             children=[
                 html.Img(src=logo_image, className="header-logo",
-                         style={'textAlign': 'center'}),
+                         ),
             ],
             className="header",
         ),
@@ -84,7 +84,7 @@ app.layout = html.Div(
                 # garden selector
                 html.Div(
                     children=[
-                        html.Div(children="Select Gardens", className="menu-title"),
+                        html.Div(children="Gardens", className="menu-title"),
                         dcc.Dropdown(
                             id=alltab_gardens,
                             options=[
@@ -101,7 +101,7 @@ app.layout = html.Div(
                 ),
 
             ],
-            className="menu",
+            className="main_menu",
         ),
 
         # preamble for tabs
@@ -116,10 +116,8 @@ app.layout = html.Div(
             className="tab-header",
         ),
 
-
         html.Div([
-            dcc.Tabs([
-
+            dcc.Tabs(children=[
                 # tab 1: chloropleth + bar
                 dcc.Tab(label='Spotlight', children=[
 
@@ -144,7 +142,7 @@ app.layout = html.Div(
                             ),
 
                         ],
-                        className="menu",
+                        className="tab1_menu",
                     ),
 
                     # wrapper of chloropleth card
@@ -200,9 +198,10 @@ app.layout = html.Div(
                                         id="sunburst", config={"displayModeBar": False},
                                     ),
 
-                                    html.P(children='Sunburst plot: relation between labels, geo-records, and recency',
-                                           className='fig-description',
-                                           ),
+                                    html.P(
+                                        children='Sunburst plot: relation between labels, geo-records, and recency',
+                                        className='fig-description',
+                                    ),
                                 ],
                                 className="card",
                             ),
@@ -250,7 +249,7 @@ app.layout = html.Div(
                         children=[
                             html.P(
                                 children='''Choose a set of gardens to see a summary of its changes over time.
-                                        ''',
+                                ''',
                                 className="header-description",
                             ),
                         ],
@@ -327,7 +326,7 @@ app.layout = html.Div(
                 # tab 3: candle
                 dcc.Tab(label='Recency', children=[
                 ])
-            ])
+            ]),
         ]),
     ]
 )
