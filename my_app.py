@@ -122,8 +122,27 @@ app.layout = html.Div(
                 dcc.Tab(label='Spotlight', children=[
 
                     html.Div([
-                        dcc.RadioItems(CONCISE_ATTRIBUTES, 'Item Count', id=tab1_attribute, inline=False,
-                                       inputStyle={"margin-left": "30px", "margin-right": "30px"}),
+                        dcc.RadioItems([
+                            {
+                                "label": "🍁 Item Count",
+                                "value": "Item Count",
+                            },
+                            {
+                                "label": "🧬 Species Count",
+                                "value": "Species Count",
+                            },
+                            {
+                                "label": "📝 Label Stats",
+                                "value": "Label Stats",
+                            },
+                            {
+                                "label": "⚓️ Geo-record Stats",
+                                "value": "Geo-record Stats",
+                            },
+                        ],
+                            value='Item Count',
+                            id=tab1_attribute, inline=True,
+                            inputStyle={"margin-left": "30px", "margin-right": "30px"}),
                     ], className="radio"),
 
                     # wrapper of chloropleth card
