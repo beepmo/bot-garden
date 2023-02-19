@@ -2,6 +2,9 @@ import dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
+import dash_auth
+from dotenv import load_dotenv
+import os
 
 # my functions
 from plots import chloropleth
@@ -14,6 +17,13 @@ from filter_data import filter_bed
 # _______________________________________________________________
 # flask
 
+load_dotenv()
+purple = os.getenv('PURPLE')
+pinks = os.getenv('PINKS')
+VALID_USERNAME_PASSWORD_PAIRS = {
+    purple: pinks
+}
+
 external_stylesheets = [
     {
         "href": "https://fonts.googleapis.com/css2?"
@@ -23,6 +33,10 @@ external_stylesheets = [
 ]
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
+auth = dash_auth.BasicAuth(
+    app,
+    VALID_USERNAME_PASSWORD_PAIRS
+)
 
 app.title = "UBC Bot Garden"
 logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
