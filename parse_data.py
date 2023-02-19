@@ -14,7 +14,7 @@ FUZZY = datetime.strptime('2016', '%Y')
 delta_fuzzy = datetime.today() - FUZZY
 FUZZY_AGE = delta_fuzzy.days
 
-GENUS = ('',
+GENUS = ('Any',
          'Acer',
          'Magnolia',
          'Rhododendron',
@@ -88,8 +88,8 @@ def concise_df(genus):  # alltab_genus is string
 
         species = row['Taxon']
 
-        # condition for skip: genus is non-empty string, taxon doesn't match
-        if genus and (species.partition(' ')[0] != genus):
+        # condition for skip: genus is specified and wouldn't want this taxon
+        if (genus != GENUS[0]) and (species.partition(' ')[0] != genus):
             continue
 
         bed = row['Bed']

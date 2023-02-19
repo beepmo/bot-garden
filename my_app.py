@@ -107,7 +107,7 @@ app.layout = html.Div(
                                 for garden in GARDENS
                             ],
                             value=[GARDENS[0]],  # 'All gardens'
-                            # wrap in list when multi=True
+                            # @param value must be wrapped in list when @param multi=True
                             clearable=True,
                             searchable=True,
                             multi=True,
