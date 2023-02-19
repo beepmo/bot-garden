@@ -92,7 +92,8 @@ app.layout = html.Div(
                                 {"label": garden, "value": garden}
                                 for garden in GARDENS
                             ],
-                            value=(GARDENS[0]),  # 'All gardens'
+                            value=[GARDENS[0]],  # 'All gardens'
+                            # wrap in list when multi=True
                             clearable=True,
                             searchable=True,
                             multi=True,
