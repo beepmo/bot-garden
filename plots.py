@@ -163,8 +163,13 @@ def sunburst(hierarchy, filtered_raw):
                       path=hierarchy,
                       color='Days elapsed since ItemStatusDate',
                       color_continuous_scale='Teal',
-                      color_continuous_midpoint=1000
+                      range_color=[0, 3650],
                       )
     fig.update_traces(hovertemplate="Number of items: %{value}<br>"
                                     "Average number of days elapsed since ItemStatusDate: %{color:.0f}")
+    fig.update_layout(coloraxis_colorbar=dict(
+        title="Average time elapsed since ItemStatusDats",
+        tickvals=[0, 365, 365*3, 365*5, 365*7, 365*9],
+        ticktext=["0", "1y", "3y", "5y", "7y", "9y"],
+    ))
     return fig
