@@ -99,7 +99,7 @@ def concise_df(genus):  # alltab_genus is string
 
         labelled = row['Label']
         georecorded = row['Geo?']
-        age = row['Days Since Sighted']
+        age = row['Days elapsed since ItemStatusDate']
 
         if bed in beds:
             # bed is in beds

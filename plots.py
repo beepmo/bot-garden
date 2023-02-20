@@ -152,7 +152,7 @@ def bar(attribute, filtered_df):
 def box(attribute, filtered_df):
     fig = px.box(filtered_df,
                  x='Bed',
-                 y='Days Since Sighted',
+                 y='Days elapsed since ItemStatusDate',
                  hover_name='Bed')
 
     return fig
@@ -161,7 +161,7 @@ def box(attribute, filtered_df):
 def sunburst(hierarchy, filtered_raw):
     fig = px.sunburst(filtered_raw,
                       path=hierarchy,
-                      color='Days Since Sighted',
+                      color='Days elapsed since ItemStatusDate',
                       color_continuous_scale='Teal',
                       color_continuous_midpoint=1000
                       )

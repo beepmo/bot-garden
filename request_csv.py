@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import os
 
 # -------------------------------------------------------
-RAW_ATTRIBUTES = ['Bed', 'Label', 'Geo?', 'Days Since Sighted', 'Taxon']
+RAW_ATTRIBUTES = ['Bed', 'Label', 'Geo?', 'Days elapsed since ItemStatusDate', 'Taxon']
 
 # -------------------------------------------------------
 # Secrets
@@ -69,17 +69,17 @@ csv_pddf = pd.read_csv(io.StringIO(download.decode('utf-8')),
 
                        # replace header names
                        header=0,  # do not infer headers from columns
-                       names=['Bed', 'Label', 'Geo?', 'Days Since Sighted', 'Taxon'],
+                       names=['Bed', 'Label', 'Geo?', 'Days elapsed since ItemStatusDate', 'Taxon'],
 
                        converters={'Geo?': to_bool,
                                    'Label': to_bool,
-                                   'Days Since Sighted': days_since
+                                   'Days elapsed since ItemStatusDate': days_since
                                    },
                        dtype={'Bed': 'category',
                               'Status': 'category',
                               }
                        )
-csv_pddf = csv_pddf.astype({'Days Since Sighted': 'int32'}, copy=False)
+csv_pddf = csv_pddf.astype({'Days elapsed since ItemStatusDate': 'int32'}, copy=False)
 end_csv = time.time()
 memory = csv_pddf.memory_usage(deep=True)
 
