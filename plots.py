@@ -158,17 +158,6 @@ def box(attribute, filtered_df):
     return fig
 
 
-def pc_line():
-    df = px.data.gapminder().query("continent == 'Oceania'")
-    fig = px.line(df, x='year', y='lifeExp', color='country', symbol="country",
-                  labels={'year': 'Date',
-                          'lifeExp': 'Percentage',
-                          'country': 'Attribute',
-                          })
-
-    return fig
-
-
 def sunburst(hierarchy, filtered_raw):
     fig = px.sunburst(filtered_raw,
                       path=hierarchy,
