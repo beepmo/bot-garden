@@ -165,5 +165,6 @@ def sunburst(hierarchy, filtered_raw):
                       color_continuous_scale='Teal',
                       color_continuous_midpoint=1000
                       )
-    fig.update_traces(hovertemplate="Days since sighted: %{value}")
+    fig.update_traces(hovertemplate="Number of items: %{value}<br>"
+                                    "Average number of days elapsed since ItemStatusDate: %{color:.0f}")
     return fig
