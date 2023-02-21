@@ -1,7 +1,7 @@
 import dash
 from dash import dcc
 from dash import html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_auth
 from dotenv import load_dotenv
 import os
@@ -222,10 +222,11 @@ app.layout = html.Div(
                             html.Div(
                                 children=[
 
-                                    # sunburst plot
-                                    dcc.Graph(
-                                        id="sunburst", config={"displayModeBar": True},
-                                    ),
+                                    dcc.Loading(id="sunburst-loading", children=[
+                                        # sunburst plot
+                                        dcc.Graph(
+                                            id="sunburst", config={"displayModeBar": True},
+                                        ), ])
                                 ],
                                 className="card",
                             ),
