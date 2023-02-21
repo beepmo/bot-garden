@@ -164,11 +164,11 @@ app.layout = html.Div(
                         children=[
                             html.Div(
                                 children=[
-
                                     # chloropleth map
-                                    dcc.Graph(
-                                        id="chloropleth", config={"displayModeBar": True},
-                                    ),
+                                    dcc.Loading(children=[  # say loading... processing...
+                                        dcc.Graph(
+                                            id="chloropleth", config={"displayModeBar": True},
+                                        ), ])
                                 ],
                                 className="card",
                             ),
@@ -221,9 +221,8 @@ app.layout = html.Div(
                         children=[
                             html.Div(
                                 children=[
-
-                                    dcc.Loading(id="sunburst-loading", children=[
-                                        # sunburst plot
+                                    # sunburst plot
+                                    dcc.Loading(children=[  # say loading... processing...
                                         dcc.Graph(
                                             id="sunburst", config={"displayModeBar": True},
                                         ), ])
