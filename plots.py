@@ -115,7 +115,7 @@ def chloropleth(attribute, filtered_df):
     )
 
     # if fitbounds is not set, the entire globe is shown
-    fig.update_geos(fitbounds="geojson", visible=True)
+    fig.update_geos(fitbounds="geojson", visible=False)
 
     # make bigger
     fig.update_layout(
@@ -154,10 +154,13 @@ def box(attribute, filtered_df):
                  x='Bed',
                  y='Days elapsed since ItemStatusDate',
                  hover_name='Bed')
-
+    fig.update_yaxes(title="ItemStatusDate age distribution in each bed",
+                     tickvals=[365, 365 * 10, 365 * 20, 365 * 30, 356 * 40],
+                     ticktext=["1y", "10y", "20y", "30y", "40y"],)
     return fig
 
 
+@beautify
 def sunburst(hierarchy, filtered_raw):
     fig = px.sunburst(filtered_raw,
                       path=hierarchy,
@@ -168,8 +171,8 @@ def sunburst(hierarchy, filtered_raw):
     fig.update_traces(hovertemplate="Number of items: %{value}<br>"
                                     "Average number of days elapsed since ItemStatusDate: %{color:.0f}")
     fig.update_layout(coloraxis_colorbar=dict(
-        title="Average time elapsed since ItemStatusDats",
-        tickvals=[0, 365, 365*3, 365*5, 365*7, 365*9],
+        title="Average time elapsed since ItemStatusDate",
+        tickvals=[0, 365, 365 * 3, 365 * 5, 365 * 7, 365 * 9],
         ticktext=["0", "1y", "3y", "5y", "7y", "9y"],
     ))
     return fig
