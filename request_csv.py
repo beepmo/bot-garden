@@ -37,7 +37,6 @@ download = result.content
 # Reading the downloaded content and making it a pandas dataframe
 
 today = datetime.today()
-cur_year = today.year
 
 
 def days_since(strin):
