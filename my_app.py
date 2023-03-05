@@ -38,7 +38,8 @@ auth = dash_auth.BasicAuth(
 )
 
 app.title = "UBC Bot Garden"
-logo_image = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
+ubc_logo = 'assets/UBC-logo-2018-fullsig-white-rgb72.png'
+garden_logo = 'assets/ubc-botanical-gardens-logo.png'
 
 # _______________________________________________________________
 # variables
@@ -69,7 +70,7 @@ app.layout = html.Div(
         # top section containing preamble & UBC logo
         html.Div(
             children=[
-                html.Img(src=logo_image, className="header-logo",
+                html.Img(src=ubc_logo, className="header-logo",
                          ),
             ],
             className="header",
@@ -262,10 +263,14 @@ app.layout = html.Div(
         html.Div(
             children=[
                 html.H1(children=''),
-                html.P(children="🥑", className="header-emoji"),
+                html.Img(src=garden_logo, className="footer-logo",
+                         ),
+                html.P(children="Located on the traditional, ancestral, and unceded "
+                                "territory of the hən̓q̓əmin̓əm̓ speaking xʷməθkʷəy̓əm (Musqueam) people.",
+                       className="land-acknowledgement"),
                 html.H1(children=''),
             ],
-            className="header",
+            className="footer",
         ),
     ], className="tab-wrapper",
 )

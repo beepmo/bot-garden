@@ -11,6 +11,11 @@ body {
     padding: 24px;
     height: 140px;
 }
+.footer {
+    background-color: #5f7494;
+    padding: 50px;
+    text-align: center;
+}
 
 .tab-header {
     display: flex;
@@ -29,6 +34,15 @@ body {
 .header-logo {
     max-width: 400px;
     height: auto;
+    margin: auto;
+}
+
+.footer-logo {
+    max-width: 200px;
+    height: auto;
+    align-self: center;
+    alignment: center;
+    align-content: center;
 }
 
 .header-title {
@@ -45,6 +59,14 @@ body {
     margin: 0 auto;
     max-width: 900px;
     font-size: 18px;
+}
+
+.land-acknowledgement {
+    color: #ffffff;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 900px;
+    font-size: 12px;
 }
 
 .wrapper {
